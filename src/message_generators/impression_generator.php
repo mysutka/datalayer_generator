@@ -1,7 +1,8 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
+use GoogleTagManager\DatalayerGenerator;
 
-class ImpressionGenerator extends MessageGenerator implements iMessage {
+class ImpressionGenerator extends DatalayerGenerator implements iMessage {
 
 	function toObject() {
 		parent::toObject();

@@ -1,7 +1,7 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
 
-class CheckoutGenerator extends MessageGenerator implements iMessage {
+class CheckoutGenerator extends DatalayerGenerator implements iMessage {
 
 	function toObject() {
 		parent::toObject();

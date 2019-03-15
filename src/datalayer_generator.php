@@ -1,7 +1,10 @@
 <?php
-namespace GoogleTagManager\MessageGenerators;
+/**
+ * Base class for generators
+ */
+namespace GoogleTagManager;
 
-class MessageGenerator {
+class DatalayerGenerator {
 	/**
 	 * @param array $options
 	 * - xhr - render in xhr requests [default: false]

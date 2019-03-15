@@ -1,7 +1,7 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
 
-class PromotionGenerator extends MessageGenerator implements iMessage {
+class PromotionGenerator extends DatalayerGenerator implements iMessage {
 
 	function toObject() {
 		parent::toObject();

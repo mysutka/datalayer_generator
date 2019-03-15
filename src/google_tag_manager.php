@@ -1,6 +1,6 @@
 <?php
 
-use GoogleTagManager\MessageGenerators\MessageGenerator;
+use GoogleTagManager\DatalayerGenerator;
 
 /**
  * Obecna trida pro predavani zprav do dataLayer pro GTM.
@@ -342,19 +342,19 @@ class GoogleTagManager {
 	}
 
 
-	function measurePromotionImpression(MessageGenerator $banner) {
+	function measurePromotionImpression(DatalayerGenerator $banner) {
 		$this->ecommerce_promotion_impressions[] = $banner;
 	}
 
-	function measureProductImpressions(MessageGenerator $impression_object) {
+	function measureProductImpressions(DatalayerGenerator $impression_object) {
 		$this->ecommerce_impressions[] = $impression_object;
 	}
 
-	function measureCheckout(MessageGenerator $basket) {
+	function measureCheckout(DatalayerGenerator $basket) {
 		$this->ecommerce_checkout[] = $basket;
 	}
 
-	function measureOtherObject(MessageGenerator $object) {
+	function measureOtherObject(DatalayerGenerator $object) {
 		$this->ecommerce_additional_objects[] = $object;
 	}
 }
