@@ -118,9 +118,8 @@ class GoogleTagManager {
 	 * 	-raw: standardni php array
 	 * 	-json
 	 * @return array
-	 * @internal obsolete method, getDataLayerMessages should be used instead
 	 */
-	function getDataLayer($options=[]) {
+	function getDataLayerMessages($options=[]) {
 		$options += [
 			"format" => "raw",
 		];
@@ -129,7 +128,17 @@ class GoogleTagManager {
 		$_dl = $this->dataLayer;
 
 		if ($_obj = $this->getBasketCheckout()) {
-			$_dl[] = $_obj;
+			$_dl[] = [
+				"event" => "checkout",
+				"ecommerce" => [
+					"checkout" => [
+						"actionFields" => [
+							"step" => 1,
+						],
+					],
+					"products" => $_obj;
+				],
+			];
 		}
 		if ($_obj = $this->getPromotionView()) {
 			$promotionParts = $this->_splitObject($_obj);
@@ -226,15 +235,17 @@ class GoogleTagManager {
 		return $_splittedObjects;
 	}
 
-	/**
-	 * Alias to obsolete getDataLayer
-	 */
-	function getDataLayerMessages($options=[]) {
-		return $this->getDataLayer($options);
-	}
-
 	function getDataLayerMessagesJson() {
 		return $this->getDataLayerMessages(["format" => "json"]);
+	}
+
+	/**
+	 * Alias to getDataLayerMessages.
+	 *
+	 * @internal for backward compatibility
+	 */
+	function getDataLayer($options=[]) {
+		return $this->getDataLayerMessages($options);
 	}
 
 	/**
