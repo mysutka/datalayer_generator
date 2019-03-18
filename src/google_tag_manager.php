@@ -136,7 +136,7 @@ class GoogleTagManager {
 							"step" => 1,
 						],
 					],
-					"products" => $_obj;
+					"products" => $_obj,
 				],
 			];
 		}
