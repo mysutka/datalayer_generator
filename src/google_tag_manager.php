@@ -166,7 +166,7 @@ class GoogleTagManager {
 		}
 
 		foreach($this->ecommerce_additional_objects as $_obj) {
-			if ($_msg = $_obj->toObject()) {
+			if ($_msg = $_obj->getDataLayerMessage()) {
 				$_dl[] = $_msg;
 			}
 		}
@@ -266,7 +266,7 @@ class GoogleTagManager {
 			if (!isset($i->options["list_selector"])) {
 				continue;
 			}
-			if ($products = $i->toObject(["key" => "url", "return_list" => false])) {
+			if ($products = $i->getDataLayerMessage(["key" => "url", "return_list" => false])) {
 				$_pd = [
 					"dataLayer" => $products,
 				];
@@ -295,7 +295,7 @@ class GoogleTagManager {
 
 		$_ecommerce_impressions = [];
 		foreach($this->ecommerce_impressions as $i) {
-			if ($products = $i->toObject()) {
+			if ($products = $i->getDataLayerMessage()) {
 				$_ecommerce_impressions = array_merge($_ecommerce_impressions, $products);
 			}
 		}
@@ -308,7 +308,7 @@ class GoogleTagManager {
 		}
 		$_checkoutMsg =  [];
 		foreach($this->ecommerce_checkout as $i) {
-			if ($_message = $i->toObject()) {
+			if ($_message = $i->getDataLayerMessage()) {
 				$_checkoutMsg = array_merge($_checkoutMsg, $_message);
 			}
 		}
@@ -321,7 +321,7 @@ class GoogleTagManager {
 		}
 		$_ec = [];
 		foreach($this->ecommerce_promotion_impressions as $p) {
-			$_ec[] = $p->toObject();
+			$_ec[] = $p->getDataLayerMessage();
 		}
 		return $_ec;
 	}

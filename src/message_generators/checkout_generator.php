@@ -3,8 +3,8 @@ namespace GoogleTagManager\MessageGenerators;
 
 class CheckoutGenerator extends DatalayerGenerator implements iMessage {
 
-	function toObject() {
-		parent::toObject();
+	function getDatalayerMessage() {
+		parent::getDatalayerMessage();
 		return [
 			[
 				"name" =>  "example Product Name",       // Name or ID is required.

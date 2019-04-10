@@ -2,5 +2,5 @@
 namespace GoogleTagManager\MessageGenerators;
 
 interface iMessage {
-	public function toObject();
+	public function getDatalayerMessage();
 }

@@ -3,8 +3,8 @@ namespace GoogleTagManager\MessageGenerators;
 
 class PromotionGenerator extends DatalayerGenerator implements iMessage {
 
-	function toObject() {
-		parent::toObject();
+	function getDatalayerMessage() {
+		parent::getDatalayerMessage();
 		return [
 			"id" => "example-banner-id-1",
 			"name" => "Example Summer Sale",
