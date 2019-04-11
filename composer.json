@@ -1,24 +1,24 @@
 {
-        "name": "mysutka/datalayer_generator",
-        "type": "library",
-        "description": "Class helping to generate datalayer",
-        "keywords": ["datalayer","gtm","google_tag_manager"],
-        "homepage": "https://github.com/mysutka/datalayer_generator",
-        "license": ["MIT"],
-        "authors": [
-                {
-                        "name": "Michal Vojan",
-                        "homepage": "https://github.com/mysutka"
-                }
-        ],
-        "require": {
-                "php": ">=5.3.0"
-        },
-				"require-dev": {
-					"phpunit/phpunit": "*"
-				},
-        "autoload": {
-                "classmap": ["src"],
-								"files": ["src/load.php"]
-        }
+	"name": "mysutka/datalayer_generator",
+	"type": "library",
+	"description": "Class helping to generate datalayer",
+	"keywords": ["datalayer","gtm","google_tag_manager"],
+	"homepage": "https://github.com/mysutka/datalayer_generator",
+	"license": ["MIT"],
+	"authors": [
+		{
+			"name": "Michal Vojan",
+			"homepage": "https://github.com/mysutka"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "*"
+	},
+	"autoload": {
+		"classmap": ["src"],
+		"files": ["src/load.php"]
+	}
 }
