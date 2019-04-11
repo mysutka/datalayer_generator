@@ -21,7 +21,6 @@ use GoogleTagManager\DatalayerGenerator;
  *
  */
 
-error_log("src/google_tag_manager.php");
 $smarty = Atk14Utils::GetSmarty();
 $plugins = [__DIR__."/app/helpers"] + $smarty->getPluginsDir();
 $smarty->setPluginsDir($plugins);
