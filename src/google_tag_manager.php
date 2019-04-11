@@ -34,7 +34,7 @@ class GoogleTagManager {
 
 	var $controller = null;
 	var $ecommerce_promotion_impressions = [];
-	var $ecommerce_impressions = [];
+	var $ecommerce_measurements = [];
 	var $ecommerce_checkout = [];
 	var $ecommerce_additional_objects = [];
 
@@ -153,15 +153,9 @@ class GoogleTagManager {
 				];
 			}
 		}
-		if ($_obj = $this->getImpressionView()) {
-			$impressionParts = $this->_splitObject($_obj);
-			foreach($impressionParts as $_ip) {
-				$_dl[] = [
-					"ecommerce" => [
-						"impressions" => $_ip,
-					],
-					"event" => "productList",
-				];
+		if ($measurements = $this->getMeasurements()) {
+			foreach($measurements as $_ip) {
+				$_dl[] = $_ip;
 			}
 		}
 
@@ -262,7 +256,7 @@ class GoogleTagManager {
 		];
 		$products_data = [];
 		$ids_map = [];
-		foreach($this->ecommerce_impressions as $i) {
+		foreach($this->ecommerce_measurements as $i) {
 			if (!isset($i->options["list_selector"])) {
 				continue;
 			}
@@ -288,18 +282,23 @@ class GoogleTagManager {
 		return $this->getProductsData(["format" => "json"]);
 	}
 
-	protected function getImpressionView() {
-		if (!$this->ecommerce_impressions) {
+	protected function getMeasurements() {
+		if (!$this->ecommerce_measurements) {
 			return null;
 		}
 
-		$_ecommerce_impressions = [];
-		foreach($this->ecommerce_impressions as $i) {
+		$_ecommerce_messages = [];
+		foreach($this->ecommerce_measurements as $i) {
 			if ($products = $i->getDataLayerMessage()) {
-				$_ecommerce_impressions = array_merge($_ecommerce_impressions, $products);
+				$activity = $i->getActivity();
+				$_ecommerce_messages[] = [
+					"ecommerce" => [
+						"${activity}" => $products,
+					],
+				];
 			}
 		}
-		return $_ecommerce_impressions;
+		return $_ecommerce_messages;
 	}
 
 	protected function getBasketCheckout() {
@@ -358,7 +357,11 @@ class GoogleTagManager {
 	}
 
 	function measureProductImpressions(DatalayerGenerator $impression_object) {
-		$this->ecommerce_impressions[] = $impression_object;
+		$this->ecommerce_measurements[] = $impression_object;
+	}
+
+	function measureProductDetail(DatalayerGenerator $product_detail_object) {
+		$this->ecommerce_measurements[] = $product_detail_object;
 	}
 
 	function measureCheckout(DatalayerGenerator $basket) {

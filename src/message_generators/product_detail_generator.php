@@ -2,10 +2,10 @@
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
 
-class ImpressionGenerator extends DatalayerGenerator implements iMessage {
+class ProductDetailGenerator extends DatalayerGenerator implements iMessage {
 
 	function getActivity() {
-		return "impressions";
+		return "detail";
 	}
 
 	function getDatalayerMessage() {
