@@ -285,10 +285,15 @@ class GoogleTagManager {
 		foreach($this->ecommerce_measurements as $i) {
 			if ($products = $i->getDataLayerMessage()) {
 				$activity = $i->getActivity();
+				$event = $activity;
+				if ($_event = $i->getEvent()) {
+					$event = $_event;
+				}
 				$_ecommerce_messages[] = [
 					"ecommerce" => [
 						"${activity}" => $products,
 					],
+					"event" => "${event}",
 				];
 			}
 		}
