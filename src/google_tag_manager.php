@@ -20,12 +20,6 @@ use GoogleTagManager\DatalayerGenerator;
  * ```
  *
  */
-
-$smarty = Atk14Utils::GetSmarty();
-$plugins = [__DIR__."/app/helpers"] + $smarty->getPluginsDir();
-$smarty->setPluginsDir($plugins);
-Atk14Require::Helper("function.gtm_datalayer", $smarty);
-
 class GoogleTagManager {
 
 	private static $Instance = null;
