@@ -147,6 +147,8 @@ class GoogleTagManager {
 				];
 			}
 		}
+		# tady by se mely zpracovat ecommerce objekty nejakym spolecnym zpusobem
+		# neco se sem jeste presune (asi getPromotionView vyse)
 		if ($measurements = $this->getMeasurements()) {
 			foreach($measurements as $_ip) {
 				$_dl[] = $_ip;
@@ -365,6 +367,10 @@ class GoogleTagManager {
 
 	function measureCheckout(DatalayerGenerator $basket) {
 		$this->ecommerce_checkout[] = $basket;
+	}
+
+	function measurePurchase(DatalayerGenerator $order) {
+		$this->ecommerce_measurements[] = $order;
 	}
 
 	function measureOtherObject(DatalayerGenerator $object) {
