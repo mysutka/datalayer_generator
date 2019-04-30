@@ -1,3 +1,3 @@
 <?php
 
-error_log("php unit bootstrap");
+define("GOOGLE_TAG_MANAGER_ID", "xyz");

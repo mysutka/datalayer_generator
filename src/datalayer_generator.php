@@ -27,7 +27,9 @@ class DatalayerGenerator {
 		if (get_called_class() == get_class() || !in_array("getDatalayerMessage" , get_class_methods(get_called_class()))) {
 		}
 		 */
-		trigger_error(sprintf("%s: do not use this class directly", get_called_class()));
+		if (get_called_class() == get_class()) {
+			trigger_error(sprintf("%s: do not use this class directly", get_called_class()));
+		}
 		return [];
 	}
 }

@@ -197,7 +197,7 @@ class GoogleTagManager {
 			"sd" => "24-bit",
 			"ni" => "1",
 			"ul" => "en-us",
-			"dl" => ATK14_HTTP_HOST,
+			"dl" => "https://github.com/mysutka/datalayer_generator/",
 			"ec" => "Ecommerce",
 			"ea" => "Promo View",
 			"de" => "UTF-8",
@@ -353,26 +353,44 @@ class GoogleTagManager {
 	}
 
 
+	/**
+	 * Mereni impresi banneru
+	 */
 	function measurePromotionImpression(DatalayerGenerator $banner) {
 		$this->ecommerce_promotion_impressions[] = $banner;
 	}
 
+	/**
+	 * Mereni impresi produktu
+	 */
 	function measureProductImpressions(DatalayerGenerator $impression_object) {
 		$this->ecommerce_measurements[] = $impression_object;
 	}
 
+	/**
+	 * Mereni detailu produktu
+	 */
 	function measureProductDetail(DatalayerGenerator $product_detail_object) {
 		$this->ecommerce_measurements[] = $product_detail_object;
 	}
 
+	/**
+	 * Mereni pruchodu kosikem
+	 */
 	function measureCheckout(DatalayerGenerator $basket) {
 		$this->ecommerce_checkout[] = $basket;
 	}
 
+	/**
+	 * Mereni nakupni transakce
+	 */
 	function measurePurchase(DatalayerGenerator $order) {
 		$this->ecommerce_measurements[] = $order;
 	}
 
+	/**
+	 * Mereni vlastniho objektu
+	 */
 	function measureOtherObject(DatalayerGenerator $object) {
 		$this->ecommerce_additional_objects[] = $object;
 	}
