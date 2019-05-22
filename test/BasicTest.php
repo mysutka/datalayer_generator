@@ -5,14 +5,16 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 		$instance = GoogleTagManager::GetInstance();
 		$this->assertNotNull($instance);
 
-		$this->assertEmpty($instance->getDataLayerMessages());
-		$this->assertEmpty($instance->getDataLayerMessagesJson());
+		$this->assertEmpty($messages = $instance->getDataLayerMessages());
+		$this->assertEmpty($messages_json = $instance->getDataLayerMessagesJson());
 	}
 
-	public function test_datalayer_for_banner_impression() {
+	public function test_datalayer_for_product_impression() {
 		$instance = GoogleTagManager::GetInstance();
 
-		$instance->measurePromotionImpression(new GoogleTagManager\MessageGenerators\ImpressionGenerator(null));
+		# @todo use own Generator, ImpressionGenerator returns builtin product array
+		$product = null;
+		$instance->measurePromotionImpression(new GoogleTagManager\MessageGenerators\ImpressionGenerator($product));
 		$this->assertNotEmpty($dl = $instance->getDataLayerMessages());
 		$this->assertCount(1, $dl);
 
@@ -28,8 +30,13 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 		$this->assertNotEmpty($dl_json = $instance->getDataLayerMessagesJson());
 		$this->assertCount(1, $dl_json);
 		$this->assertInternalType("string", $element = array_shift($dl_json));
-		$this->assertNotNull($obj = json_decode($element,true));
-		$this->assertInternalType("array", $obj);
+		$this->assertNotNull($obj_json = json_decode($element,true));
+		$this->assertInternalType("array", $obj_json);
+
+
+		# message returned either as array or as json should contain same data
+		$this->assertEquals(sizeof($dl), sizeof($dl_json));
+		$this->assertSame($obj, $obj_json);
 	}
 }
 
