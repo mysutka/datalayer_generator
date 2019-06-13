@@ -8,6 +8,10 @@ class ImpressionGenerator extends DatalayerGenerator implements iMessage {
 		return "impressions";
 	}
 
+	function getEvent() {
+		return null;
+	}
+
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
 		return [[

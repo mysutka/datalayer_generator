@@ -1,7 +1,16 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
+use GoogleTagManager\DatalayerGenerator;
 
 class PromotionGenerator extends DatalayerGenerator implements iMessage {
+
+	function getActivity() {
+		return "promoView";
+	}
+
+	function getEvent() {
+		return null;
+	}
 
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
