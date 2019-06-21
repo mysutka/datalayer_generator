@@ -8,6 +8,10 @@ class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 		return "purchase";
 	}
 
+	function getEvent() {
+		return null;
+	}
+
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
 		return [
@@ -22,7 +26,7 @@ class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 				[
 					"id" =>  "Purchased Product ID",
 					"name" =>  "Purchased Product Name",       // Name or ID is required.
-					"variant" => "Purchased Product Variant"
+					"variant" => "Purchased Product Variant",
 					"category" => "Shoes / Children",
 					"sku" => "",
 					"price" => "123.5", # unit price including vat
