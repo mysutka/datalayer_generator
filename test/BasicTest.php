@@ -17,7 +17,7 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 		# @todo use own Generator, ImpressionsGenerator returns builtin product array
 		$product = null;
-		$instance->measureProductImpressions(new GoogleTagManager\MessageGenerators\ImpressionsGenerator($product));
+		$instance->measureProductImpressions(new GoogleTagManager\MessageGenerators\SomethingGenerator($product));
 		$this->assertNotEmpty($dl = $instance->getDataLayerMessages());
 		$this->assertCount(1, $dl);
 #		print(print_r($dl,true));

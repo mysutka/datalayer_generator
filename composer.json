@@ -22,6 +22,6 @@
 		"files": ["src/load.php"]
 	},
 	"autoload-dev": {
-		"classmap": ["test"]
+		"classmap": ["src", "test"]
 	}
 }
