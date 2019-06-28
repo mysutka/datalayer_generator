@@ -15,9 +15,9 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 	public function test_datalayer_for_product_impressions() {
 		$instance = GoogleTagManager::GetInstance();
 
-		# @todo use own Generator, ImpressionGenerator returns builtin product array
+		# @todo use own Generator, ImpressionsGenerator returns builtin product array
 		$product = null;
-		$instance->measureProductImpressions(new GoogleTagManager\MessageGenerators\ImpressionGenerator($product));
+		$instance->measureProductImpressions(new GoogleTagManager\MessageGenerators\ImpressionsGenerator($product));
 		$this->assertNotEmpty($dl = $instance->getDataLayerMessages());
 		$this->assertCount(1, $dl);
 #		print(print_r($dl,true));
