@@ -32,5 +32,20 @@ class DatalayerGenerator {
 		}
 		return [];
 	}
+
+	function getImpressionClass() {
+		$instance = \GoogleTagManager::GetInstance();
+		return $instance->impressionClass;
+	}
+
+	function getProductClass() {
+		$instance = \GoogleTagManager::GetInstance();
+		return $instance->productClass;
+	}
+
+	function getPromotionClass() {
+		$instance = \GoogleTagManager::GetInstance();
+		return $instance->promotionClass;
+	}
 }
 

@@ -351,20 +351,6 @@ class GoogleTagManager {
 	}
 
 	/**
-	 * Mereni impresi produktu
-	 */
-	function measureProductImpressions(DatalayerGenerator $impression_object) {
-		$this->ecommerce_measurements[] = $impression_object;
-	}
-
-	/**
-	 * Mereni detailu produktu
-	 */
-	function measureProductDetail(DatalayerGenerator $product_detail_object) {
-		$this->ecommerce_measurements[] = $product_detail_object;
-	}
-
-	/**
 	 * Mereni pruchodu kosikem
 	 */
 	function measureCheckout(DatalayerGenerator $basket) {
@@ -372,10 +358,29 @@ class GoogleTagManager {
 	}
 
 	/**
+	 * Mereni impresi produktu
+	 */
+	function measureProductImpressions(DatalayerGenerator $impression_object) {
+		return $this->measureEcommerceObject($impression_object);
+	}
+
+	/**
+	 * Mereni detailu produktu
+	 */
+	function measureProductDetail(DatalayerGenerator $product_detail_object) {
+		return $this->measureEcommerceObject($product_detail_object);
+	}
+
+	/**
 	 * Mereni nakupni transakce
+	 * Alias to measureEcommerceObject
 	 */
 	function measurePurchase(DatalayerGenerator $order) {
-		$this->ecommerce_measurements[] = $order;
+		return $this->measureEcommerceObject($order);
+	}
+
+	function measureEcommerceObject(DatalayerGenerator $ecObject) {
+		$this->ecommerce_measurements[] = $ecObject;
 	}
 
 	/**
@@ -394,5 +399,9 @@ class GoogleTagManager {
 
 	function setProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
 		self::$Instance->productClass = $productClass;
+	}
+
+	function setPromotionClass(GoogleTagManager\Datatypes\ecDatatype $promotionClass) {
+		self::$Instance->promotionClass = $promotionClass;
 	}
 }

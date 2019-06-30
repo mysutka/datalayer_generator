@@ -25,11 +25,6 @@ class ImpressionsGenerator extends DatalayerGenerator implements iMessage {
 		];
 	}
 
-	function getImpressionClass() {
-		$instance = \GoogleTagManager::GetInstance();
-		return $instance->impressionClass;
-	}
-
 	function getIdsMap() {
 		return [];
 	}

@@ -36,14 +36,4 @@ class ProductDetailGenerator extends DatalayerGenerator implements iMessage {
 				"event" => "detail",
 			];
 	}
-
-	function getProductClass() {
-		$instance = \GoogleTagManager::GetInstance();
-		return $instance->productClass;
-	}
-/*	
-	function getIdsMap() {
-		return [];
-	}
- */
 }

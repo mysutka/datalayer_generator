@@ -42,9 +42,4 @@ class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 			"event" => "purchase"
 		];
 	}
-
-	function getProductClass() {
-		$instance = \GoogleTagManager::GetInstance();
-		return $instance->productClass;
-	}
 }

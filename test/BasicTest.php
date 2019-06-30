@@ -128,25 +128,18 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 		$this->assertSame($obj, $obj_json);
 	}
 
-	public function notest_datalayer_for_banner_promotions() {
+	public function test_datalayer_for_banner_promotions() {
 		$instance = GoogleTagManager::GetInstance();
+		$instance->setPromotionClass(new GoogleTagManager\Datatypes\Promotion);
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
-		$product = null;
+		$product = ["a","b"];
 		$instance->measureProductImpressions(new GoogleTagManager\MessageGenerators\PromotionGenerator($product));
-		$this->assertNotEmpty($dl = $instance->getDataLayerMessages());
-		$this->assertCount(1, $dl);
-#		print(print_r($dl,true));
+		$this->_test_basic($instance, ["activity" => "promoView", "event" => "promoView", "debug" => !true]);
 
-		$this->assertInternalType("array", $obj = array_shift($dl));
-#		print(print_r($obj,true));
+		$dl = $instance->getDataLayerMessages();
+		$obj = array_shift($dl);
 
-		# array contains two keys "ecommerce" and "event"
-		$this->assertCount(2, array_keys($obj));
-		$this->assertSame(["ecommerce","event"], array_keys($obj));
-		$this->assertEquals("promoView", $obj["event"]);
-
-		$this->assertArrayHasKey("promoView", $obj["ecommerce"]);
 		$this->assertArrayNotHasKey("products", $obj["ecommerce"]["promoView"]);
 		$this->assertInternalType("array", $obj["ecommerce"]["promoView"]);
 

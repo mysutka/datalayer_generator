@@ -8,21 +8,18 @@ namespace GoogleTagManager\Datatypes;
  *
  * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#ecommerce-data
  */
-class Product extends EcDatatype implements iDatatype {
+class Promotion extends EcDatatype implements iDatatype {
 
 	/**
-		* @param $productObject objekt produktu
+		* @param $impressionObject objekt produktu
 		* @return array this is the dummy class and so return dummy data in array
 	 */
-	function getData($productObject) {
+	function getData($impressionObject) {
 		return [
-			"name" =>  "example Product Name",       // Name or ID is required.
-			"id" =>  "example Product ID",
-			"price" => "123.5 CZK",
-			"brand" => "Example Nike Brand",
-			"category" =>  "Example/Shoes/Sport",
-			"variant" => "example Black",
-			"list" => "example List name",
+			"id" => "example-banner-id-1",
+			"name" => "Example Summer Sale",
+			"creative" => "Example Just Banner",
+			"position" => "example: slot 1",
 		];
 	}
 }
