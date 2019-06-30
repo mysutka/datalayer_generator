@@ -286,17 +286,7 @@ class GoogleTagManager {
 		$_ecommerce_messages = [];
 		foreach($this->ecommerce_measurements as $i) {
 			if ($products = $i->getDataLayerMessage()) {
-				$activity = $i->getActivity();
-				$event = $activity;
-				if ($_event = $i->getEvent()) {
-					$event = $_event;
-				}
-				$_ecommerce_messages[] = [
-					"ecommerce" => [
-						"${activity}" => $products,
-					],
-					"event" => "${event}",
-				];
+				$_ecommerce_messages[] = $products;
 			}
 		}
 		return $_ecommerce_messages;
@@ -393,5 +383,16 @@ class GoogleTagManager {
 	 */
 	function measureOtherObject(DatalayerGenerator $object) {
 		$this->ecommerce_additional_objects[] = $object;
+	}
+
+	/**
+	 * Nastaveni generatoru zakladnich typu (impression data, product data, promotion data, action data)
+	 */
+	function setImpressionClass(GoogleTagManager\Datatypes\ecDatatype $impressionClass) {
+		self::$Instance->impressionClass = $impressionClass;
+	}
+
+	function setProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
+		self::$Instance->productClass = $productClass;
 	}
 }

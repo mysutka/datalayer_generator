@@ -1,6 +1,7 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
+use GoogleTagManager\Datatypes\Impression;
 
 class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 
@@ -12,27 +13,38 @@ class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 		return null;
 	}
 
+	/**
+	 * @todo actionField
+	 */
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
+		$objDT = $this->getProductClass();
+		$_activity = $this->getActivity();
+		$_objects = $this->getObject();
+		is_object($_objects) && ($_objects = [$_objects]);
+		$_productsAr = [];
+		foreach($_objects as $_o) {
+			$_productsAr[] = $objDT->getData($_o);
+		}
 		return [
-			"actionField" => [
-				"id" => "order#no",
-				"affiliation" => "Example e-shop",
-				"revenue" => "102", # items price without vat
-				"tax" => "21.5",
-				"shipping" => "99"
-			],
-			"products" => [
-				[
-					"id" =>  "Purchased Product ID",
-					"name" =>  "Purchased Product Name",       // Name or ID is required.
-					"variant" => "Purchased Product Variant",
-					"category" => "Shoes / Children",
-					"sku" => "",
-					"price" => "123.5", # unit price including vat
-					"quantity" => "3"
+			"ecommerce" => [
+				"${_activity}" => [
+					"products" => $_productsAr,
+					"actionField" => [
+						"id" => "order#no",
+						"affiliation" => "Example e-shop",
+						"revenue" => "102", # items price without vat
+						"tax" => "21.5",
+						"shipping" => "99"
+					],
 				],
-			]
+			],
+			"event" => "purchase"
 		];
+	}
+
+	function getProductClass() {
+		$instance = \GoogleTagManager::GetInstance();
+		return $instance->productClass;
 	}
 }

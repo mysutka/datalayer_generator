@@ -12,33 +12,38 @@ class ProductDetailGenerator extends DatalayerGenerator implements iMessage {
 		return null;
 	}
 
+	/**
+	 * @todo actionField
+	 */
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
-		return [
-			"products" => [
-				[
-					"name" =>  "example Product Name",       // Name or ID is required.
-					"id" =>  "example Product ID",
-					"price" => "123.5 CZK",
-					"brand" => "Example Nike Brand",
-					"category" =>  "Example/Shoes/Sport",
-					"variant" => "example Black",
-					"list" => "example List name",
+		$objDT = $this->getProductClass();
+		$_activity = $this->getActivity();
+		$_objects = $this->getObject();
+		is_object($_objects) && ($_objects = [$_objects]);
+		$_productsAr = [];
+		foreach($_objects as $_o) {
+			$_productsAr[] = $objDT->getData($_o);
+		}
+		return
+			[
+				"ecommerce" => [
+					"${_activity}" => [
+						"products" => $_productsAr,
+						"actionField" => [ "list" => "Example list"],
+					],
 				],
-				[
-					"name" =>  "example Product 2 Name",       // Name or ID is required.
-					"id" =>  "example Product 2 ID",
-					"price" => "234.5 CZK",
-					"brand" => "Example Nike Brand",
-					"category" =>  "Example/Shoes/Sport",
-					"variant" => "example Black",
-					"list" => "example List name",
-				],
-			]
-		];
+				"event" => "detail",
+			];
 	}
-	
+
+	function getProductClass() {
+		$instance = \GoogleTagManager::GetInstance();
+		return $instance->productClass;
+	}
+/*	
 	function getIdsMap() {
 		return [];
 	}
+ */
 }
