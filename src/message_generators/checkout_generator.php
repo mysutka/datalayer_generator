@@ -1,29 +1,38 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
+use GoogleTagManager\DatalayerGenerator;
 
 class CheckoutGenerator extends DatalayerGenerator implements iMessage {
 
+	function getActivity() {
+		return "checkout";
+	}
+
+	function getEvent() {
+		return null;
+	}
+
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
+		$objDT = $this->getProductClass();
+		$_activity = $this->getActivity();
+		$_objects = $this->getObject();
+		is_object($_objects) && ($_objects = [$_objects]);
+		$_productsAr = [];
+		foreach($_objects as $_o) {
+			$_productsAr[] = $objDT->getData($_o);
+		}
 		return [
-			[
-				"name" =>  "example Product Name",       // Name or ID is required.
-				"id" =>  "example Product ID",
-				"price" => "123.5 CZK",
-				"brand" => "Example Nike Brand",
-				"category" =>  "Example/Shoes/Sport",
-				"variant" => "example Black",
-				"quantity" => 1,
+			"ecommerce" => [
+				"${_activity}" => [
+					"products" => $_productsAr,
+					"actionField" => [
+						"step" => 1,
+						"option" => "Visa",
+					],
+				],
 			],
-			[
-				"name" =>  "example 2 Product Name",       // Name or ID is required.
-				"id" =>  "example 2 Product ID",
-				"price" => "234.5 CZK",
-				"brand" => "Example 2 Nike Brand",
-				"category" =>  "Example/Shoes/Sport",
-				"variant" => "example Red",
-				"quantity" => 3,
-			],
+			"event" => "checkout"
 		];
 	}
 }

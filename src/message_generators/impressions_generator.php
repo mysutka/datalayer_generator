@@ -1,7 +1,6 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
-use GoogleTagManager\Datatypes\Impression;
 
 class ImpressionsGenerator extends DatalayerGenerator implements iMessage {
 

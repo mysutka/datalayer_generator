@@ -1,7 +1,6 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
-use GoogleTagManager\Datatypes\Promotion;
 
 class PromotionGenerator extends DatalayerGenerator implements iMessage {
 
@@ -13,6 +12,9 @@ class PromotionGenerator extends DatalayerGenerator implements iMessage {
 		return null;
 	}
 
+	/**
+	 * @todo use GoogleTagManager::splitObject()
+	 */
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
 		$objDT = $this->getPromotionClass();

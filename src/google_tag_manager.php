@@ -27,9 +27,9 @@ class GoogleTagManager {
 	var $dataLayerObject = array();
 
 	var $controller = null;
-	var $ecommerce_promotion_impressions = [];
+#	var $ecommerce_promotion_impressions = [];
 	var $ecommerce_measurements = [];
-	var $ecommerce_checkout = [];
+#	var $ecommerce_checkout = [];
 	var $ecommerce_additional_objects = [];
 
 	private function __construct() { }
@@ -120,8 +120,8 @@ class GoogleTagManager {
 		$this->closeQueue();
 
 		$_dl = $this->dataLayer;
-
-		if ($_obj = $this->getBasketCheckout()) {
+/*
+		if (false && ($_obj = $this->getBasketCheckout())) {
 			$_dl[] = [
 				"event" => "checkout",
 				"ecommerce" => [
@@ -134,7 +134,8 @@ class GoogleTagManager {
 				],
 			];
 		}
-		if ($_obj = $this->getPromotionView()) {
+ */
+/*		if (false && ($_obj = $this->getPromotionView())) {
 			$promotionParts = $this->_splitObject($_obj);
 			foreach($promotionParts as $_pp) {
 				$_dl[] = [
@@ -147,8 +148,8 @@ class GoogleTagManager {
 				];
 			}
 		}
+ */
 		# tady by se mely zpracovat ecommerce objekty nejakym spolecnym zpusobem
-		# neco se sem jeste presune (asi getPromotionView vyse)
 		if ($measurements = $this->getMeasurements()) {
 			foreach($measurements as $_ip) {
 				$_dl[] = $_ip;
@@ -292,6 +293,7 @@ class GoogleTagManager {
 		return $_ecommerce_messages;
 	}
 
+/*
 	protected function getBasketCheckout() {
 		if (!$this->ecommerce_checkout) {
 			return null;
@@ -304,7 +306,8 @@ class GoogleTagManager {
 		}
 		return $_checkoutMsg;
 	}
-
+ */
+	/*
 	protected function getPromotionView() {
 		if (!$this->ecommerce_promotion_impressions) {
 			return null;
@@ -315,6 +318,7 @@ class GoogleTagManager {
 		}
 		return $_ec;
 	}
+	 */
 
 	function &getCurrentQueue($options=array()) {
 		$options += array(
@@ -346,15 +350,15 @@ class GoogleTagManager {
 	/**
 	 * Mereni impresi banneru
 	 */
-	function measurePromotionImpression(DatalayerGenerator $banner) {
+/*	function measurePromotionImpression(DatalayerGenerator $banner) {
 		$this->ecommerce_promotion_impressions[] = $banner;
 	}
-
+ */
 	/**
 	 * Mereni pruchodu kosikem
 	 */
 	function measureCheckout(DatalayerGenerator $basket) {
-		$this->ecommerce_checkout[] = $basket;
+		return $this->measureEcommerceObject($basket);
 	}
 
 	/**
@@ -379,12 +383,15 @@ class GoogleTagManager {
 		return $this->measureEcommerceObject($order);
 	}
 
+	/**
+	 * Pridani bezneho ecommerce objektu do seznamu
+	 */
 	function measureEcommerceObject(DatalayerGenerator $ecObject) {
 		$this->ecommerce_measurements[] = $ecObject;
 	}
 
 	/**
-	 * Mereni vlastniho objektu
+	 * Mereni nestandardniho objektu
 	 */
 	function measureOtherObject(DatalayerGenerator $object) {
 		$this->ecommerce_additional_objects[] = $object;
