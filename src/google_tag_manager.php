@@ -400,15 +400,27 @@ class GoogleTagManager {
 	/**
 	 * Nastaveni generatoru zakladnich typu (impression data, product data, promotion data, action data)
 	 */
-	function setImpressionClass(GoogleTagManager\Datatypes\ecDatatype $impressionClass) {
+	static function SetImpressionClass(GoogleTagManager\Datatypes\ecDatatype $impressionClass) {
 		self::$Instance->impressionClass = $impressionClass;
 	}
 
-	function setProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
+	static function SetProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
 		self::$Instance->productClass = $productClass;
 	}
 
-	function setPromotionClass(GoogleTagManager\Datatypes\ecDatatype $promotionClass) {
+	static function setPromotionClass(GoogleTagManager\Datatypes\ecDatatype $promotionClass) {
 		self::$Instance->promotionClass = $promotionClass;
+	}
+
+	static function GetImpressionClass() {
+		return self::$Instance->impressionClass;
+	}
+
+	static function GetProductClass() {
+		return self::$Instance->productClass;
+	}
+
+	static function GetPromotionClass() {
+		return self::$Instance->promotionClass;
 	}
 }

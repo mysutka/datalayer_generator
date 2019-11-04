@@ -14,7 +14,7 @@ class ImpressionsGenerator extends DatalayerGenerator implements iMessage {
 
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
-		$objDT = $this->getImpressionClass();
+		$objDT = \GoogleTagManager::GetImpressionClass();
 		$_activity = $this->getActivity();
 		return [
 			"ecommerce" => [

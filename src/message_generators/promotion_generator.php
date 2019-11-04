@@ -17,7 +17,7 @@ class PromotionGenerator extends DatalayerGenerator implements iMessage {
 	 */
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
-		$objDT = $this->getPromotionClass();
+		$objDT = \GoogleTagManager::GetPromotionClass();
 		$_activity = $this->getActivity();
 		$_objects = $this->getObject();
 		is_object($_objects) && ($_objects = [$_objects]);

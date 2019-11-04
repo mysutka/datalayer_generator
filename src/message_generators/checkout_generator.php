@@ -14,7 +14,7 @@ class CheckoutGenerator extends DatalayerGenerator implements iMessage {
 
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
-		$objDT = $this->getProductClass();
+		$objDT = \GoogleTagManager::GetProductClass();
 		$_activity = $this->getActivity();
 		$_objects = $this->getObject();
 		is_object($_objects) && ($_objects = [$_objects]);
