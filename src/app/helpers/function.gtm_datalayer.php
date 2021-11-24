@@ -9,7 +9,7 @@ function smarty_function_gtm_datalayer($params, $template) {
 
 	$gtm = $smarty->getTemplateVars("gtm");
 	if (!$gtm) {
-		return $out;
+		return "";
 	}
 
 	$out[] = "// out by helper gtm_datalayer";
