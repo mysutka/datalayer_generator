@@ -56,6 +56,10 @@ class GoogleTagManager {
 			$controller->tpl_data["gtm"] = self::$Instance;
 		}
 
+		# set default datatypes class names
+		\GoogleTagManager::SetProductClass(new GoogleTagManager\Datatypes\Product());
+		\GoogleTagManager::SetPromotionClass(new GoogleTagManager\Datatypes\Promotion);
+		\GoogleTagManager::SetImpressionClass(new GoogleTagManager\Datatypes\Impression());
 		return self::$Instance;
 	}
 

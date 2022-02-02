@@ -44,8 +44,6 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 	public function test_datalayer_for_product_impressions() {
 		$instance = GoogleTagManager::GetInstance();
 
-		\GoogleTagManager::SetImpressionClass(new GoogleTagManager\Datatypes\Impression());
-
 		# @todo use own Generator, ImpressionsGenerator returns builtin product array
 		$product = null;
 		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\ImpressionsGenerator($product));
@@ -71,7 +69,6 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 	public function test_datalayer_for_product_detail() {
 		$instance = GoogleTagManager::GetInstance();
-		\GoogleTagManager::SetProductClass(new GoogleTagManager\Datatypes\Product());
 
 		# @todo use own Generator, ProductDetailGenerator returns builtin product array
 		$product = ["a","b"];
@@ -100,7 +97,6 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 	public function test_datalayer_for_purchase() {
 		$instance = GoogleTagManager::GetInstance();
-		\GoogleTagManager::SetProductClass(new GoogleTagManager\Datatypes\Product());
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -126,8 +122,6 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 	public function test_datalayer_for_checkout() {
 		$instance = GoogleTagManager::GetInstance();
-		\GoogleTagManager::SetProductClass(new GoogleTagManager\Datatypes\Product());
-
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -152,7 +146,6 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 	public function test_datalayer_for_banner_promotions() {
 		$instance = GoogleTagManager::GetInstance();
-		\GoogleTagManager::SetPromotionClass(new GoogleTagManager\Datatypes\Promotion);
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a","b"];
