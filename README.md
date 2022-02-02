@@ -15,3 +15,6 @@ EcDatatype - generuje struktury pro zakladni datatypy:
  - Product - informace o produktu spojene s ecommerce aktivitami (detail, add, checkout ...)
  - Promotion - bannery
  - jeste chybi ActionData - informace spojene s ecommerce
+
+Universal Analytics Enhanced Ecommerce using Data Layer guide
+https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce
