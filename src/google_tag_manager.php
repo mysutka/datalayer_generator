@@ -41,15 +41,9 @@ class GoogleTagManager {
 	 *
 	 *
 	 * @param array $options
-	 * @todo upravit. pokud uz je instance k dispozici, rovnou ji vratit
 	 */
 	static function &GetInstance($controller=null, $options=array()) {
 		$options += array();
-
-		if (!defined("GOOGLE_TAG_MANAGER_ID")) {
-			$null = null;
-			return $null;
-		}
 
 		if (!isset(self::$Instance)) {
 			self::$Instance = new static();
@@ -58,8 +52,7 @@ class GoogleTagManager {
 			self::$Instance->controller = $controller;
 		}
 		self::$Instance->options = $options;
-		if (defined("GOOGLE_TAG_MANAGER_ID") && $controller) {
-			$controller->tpl_data["GOOGLE_TAG_MANAGER_ID"] = GOOGLE_TAG_MANAGER_ID;
+		if ($controller) {
 			$controller->tpl_data["gtm"] = self::$Instance;
 		}
 
