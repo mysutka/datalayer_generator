@@ -2,14 +2,17 @@
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
 
-class PromotionGenerator extends DatalayerGenerator implements iMessage {
+class Promotion extends ActionBase implements iMessage {
+
+	function __construct($object, $options=[]) {
+		$options += [
+			"event" => "promoView",
+		];
+		parent::__construct($object, $options);
+	}
 
 	function getActivity() {
 		return "promoView";
-	}
-
-	function getEvent() {
-		return null;
 	}
 
 	/**
@@ -25,13 +28,16 @@ class PromotionGenerator extends DatalayerGenerator implements iMessage {
 		foreach($_objects as $_o) {
 			$_productsAr[] = $objDT->getData($_o);
 		}
-		return [
+		$out = [
 			"ecommerce" => [
 				"${_activity}" => [
 					"promotions" => $_productsAr,
 				],
 			],
-			"event" => "promoView"
 		];
+		if ($_event = $this->getEvent()) {
+			$out["event"] = $_event;
+		}
+		return $out;
 	}
 }

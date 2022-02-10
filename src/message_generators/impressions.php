@@ -2,26 +2,33 @@
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
 
-class ImpressionsGenerator extends DatalayerGenerator implements iMessage {
+class Impressions extends ActionBase implements iMessage {
+
+	function __construct($object, $options=[]) {
+		$options += [
+			"event" => "impressions",
+		];
+		parent::__construct($object, $options);
+	}
 
 	function getActivity() {
 		return "impressions";
-	}
-
-	function getEvent() {
-		return null;
 	}
 
 	function getDatalayerMessage() {
 		parent::getDatalayerMessage();
 		$objDT = \GoogleTagManager::GetImpressionClass();
 		$_activity = $this->getActivity();
-		return [
+		$out = [
 			"ecommerce" => [
 				"${_activity}" => [$objDT->getData($this->getObject())],
 			],
-			"event" => "impressions"
 		];
+		if ($_event = $this->getEvent()) {
+			$out["event"] = $_event;
+		}
+		return $out;
+
 	}
 
 	function getIdsMap() {

@@ -1,16 +1,18 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
-use GoogleTagManager\Datatypes\Impression;
 
-class PurchaseGenerator extends DatalayerGenerator implements iMessage {
+class Purchase extends ActionBase implements iMessage {
+
+	function __construct($object, $options=[]) {
+		$options += [
+			"event" => "purchase",
+		];
+		parent::__construct($object, $options);
+	}
 
 	function getActivity() {
 		return "purchase";
-	}
-
-	function getEvent() {
-		return null;
 	}
 
 	/**
@@ -26,7 +28,7 @@ class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 		foreach($_objects as $_o) {
 			$_productsAr[] = $objDT->getData($_o);
 		}
-		return [
+		$out = [
 			"ecommerce" => [
 				"${_activity}" => [
 					"products" => $_productsAr,
@@ -39,7 +41,10 @@ class PurchaseGenerator extends DatalayerGenerator implements iMessage {
 					],
 				],
 			],
-			"event" => "purchase"
 		];
+		if ($_event = $this->getEvent()) {
+			$out["event"] = $_event;
+		}
+		return $out;
 	}
 }

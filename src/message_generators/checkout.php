@@ -2,14 +2,17 @@
 namespace GoogleTagManager\MessageGenerators;
 use GoogleTagManager\DatalayerGenerator;
 
-class CheckoutGenerator extends DatalayerGenerator implements iMessage {
+class Checkout extends ActionBase implements iMessage {
+
+	function __construct($object, $options=[]) {
+		$options += [
+			"event" => "checkout",
+		];
+		parent::__construct($object, $options);
+	}
 
 	function getActivity() {
 		return "checkout";
-	}
-
-	function getEvent() {
-		return null;
 	}
 
 	function getDatalayerMessage() {
@@ -22,7 +25,7 @@ class CheckoutGenerator extends DatalayerGenerator implements iMessage {
 		foreach($_objects as $_o) {
 			$_productsAr[] = $objDT->getData($_o);
 		}
-		return [
+		$out = [
 			"ecommerce" => [
 				"${_activity}" => [
 					"products" => $_productsAr,
@@ -32,7 +35,10 @@ class CheckoutGenerator extends DatalayerGenerator implements iMessage {
 					],
 				],
 			],
-			"event" => "checkout"
 		];
+		if ($_event = $this->getEvent()) {
+			$out["event"] = $_event;
+		}
+		return $out;
 	}
 }

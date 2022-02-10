@@ -46,7 +46,7 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 		# @todo use own Generator, ImpressionsGenerator returns builtin product array
 		$product = null;
-		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\ImpressionsGenerator($product));
+		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\Impressions($product));
 		$this->_test_basic($instance, ["activity" => "impressions", "event" => "impressions"]);
 		$this->_test_basic_json($instance, ["activity" => "checkout", "event" => "checkout", "debug" => !true]);
 
@@ -72,7 +72,7 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 		# @todo use own Generator, ProductDetailGenerator returns builtin product array
 		$product = ["a","b"];
-		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\ProductDetailGenerator($product));
+		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\ProductDetail($product));
 		$this->_test_basic($instance, ["activity" => "detail", "event" => "detail", "debug" => !true]);
 		$this->_test_basic_json($instance, ["activity" => "checkout", "event" => "checkout", "debug" => !true]);
 
@@ -100,7 +100,7 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
-		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\PurchaseGenerator($product));
+		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\Purchase($product));
 		$this->_test_basic($instance, ["activity" => "purchase", "event" => "purchase", "debug" => !true]);
 		$this->_test_basic_json($instance, ["activity" => "checkout", "event" => "checkout", "debug" => !true]);
 
@@ -125,7 +125,7 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
-		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\CheckoutGenerator($product));
+		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\Checkout($product));
 		$this->_test_basic($instance, ["activity" => "checkout", "event" => "checkout", "debug" => !true]);
 		$this->_test_basic_json($instance, ["activity" => "checkout", "event" => "checkout", "debug" => !true]);
 
@@ -149,7 +149,7 @@ class BasicTest extends PHPUnit\Framework\TestCase {
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a","b"];
-		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\PromotionGenerator($product));
+		$instance->measureEcommerceObject(new GoogleTagManager\MessageGenerators\Promotion($product));
 		$this->_test_basic($instance, ["activity" => "promoView", "event" => "promoView", "debug" => !true]);
 
 		$dl = $instance->getDataLayerMessages();

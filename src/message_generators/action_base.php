@@ -2,17 +2,19 @@
 /**
  * Base class for generators
  */
-namespace GoogleTagManager;
+namespace GoogleTagManager\MessageGenerators;;
 
-class DatalayerGenerator {
+class ActionBase {
 	/**
 	 * @param array $options
 	 * - xhr - render in xhr requests [default: false]
+	 * - event - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
 	 */
 	function __construct($object, $options=[]) {
 
 		$options += [
 			"xhr" => false,
+			"event" => null,
 		];
 		$this->object = $object;
 		$this->options = $options;
@@ -20,6 +22,13 @@ class DatalayerGenerator {
 
 	function getObject() {
 		return $this->object;
+	}
+
+	function getEvent() {
+		if (!isset($this->options["event"])) {
+			return null;
+		}
+		return $this->options["event"];
 	}
 
 	function getDatalayerMessage() {
