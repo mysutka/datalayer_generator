@@ -31,6 +31,17 @@ class ActionBase {
 		return $this->options["event"];
 	}
 
+	function getActivity() {
+		if (!isset($this->options["activity"])) {
+			return null;
+		}
+		return $this->options["activity"];
+	}
+
+	function getActionField() {
+		return null;
+	}
+
 	function getDatalayerMessage() {
 		/* Hlasku vypsat jen kdyz je volana trida DatalayerGenerator nebo kdyz volana trida nema metodu getDatalayerMessage()
 		if (get_called_class() == get_class() || !in_array("getDatalayerMessage" , get_class_methods(get_called_class()))) {

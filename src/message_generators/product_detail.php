@@ -1,18 +1,14 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
-use GoogleTagManager\DatalayerGenerator;
 
 class ProductDetail extends ActionBase implements iMessage {
 
 	function __construct($object, $options=[]) {
 		$options += [
-			"event" => "detail",
+#			"event" => "detail",
+			"activity" => "detail",
 		];
 		parent::__construct($object, $options);
-	}
-
-	function getActivity() {
-		return "detail";
 	}
 
 	/**
@@ -32,13 +28,15 @@ class ProductDetail extends ActionBase implements iMessage {
 			"ecommerce" => [
 				"${_activity}" => [
 					"products" => $_productsAr,
-					"actionField" => [ "list" => "Example list"],
 				],
 			],
 		];
-		if ($_event = $this->getEvent()) {
-			$out["event"] = $_event;
-		}
 		return $out;
+	}
+
+	function getActionField() {
+		return [
+			"list" => "Example list",
+		];
 	}
 }

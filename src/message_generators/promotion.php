@@ -1,18 +1,14 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
-use GoogleTagManager\DatalayerGenerator;
 
 class Promotion extends ActionBase implements iMessage {
 
 	function __construct($object, $options=[]) {
 		$options += [
 			"event" => "promoView",
+			"activity" => "promoView",
 		];
 		parent::__construct($object, $options);
-	}
-
-	function getActivity() {
-		return "promoView";
 	}
 
 	/**
@@ -35,9 +31,6 @@ class Promotion extends ActionBase implements iMessage {
 				],
 			],
 		];
-		if ($_event = $this->getEvent()) {
-			$out["event"] = $_event;
-		}
 		return $out;
 	}
 }

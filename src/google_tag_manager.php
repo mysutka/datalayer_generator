@@ -64,43 +64,6 @@ class GoogleTagManager {
 	}
 
 	/**
-	 * Prida do fronty merenych udalosti dalsi hodnoty.
-	 *
-	 * Vetsinou se uklada vse do jedne fronty. Opakovane pouziti setObjectParams() tedy stale uklada hodnoty do jedne fronty.
-	 * Pro nektera mereni je treba vytvorit novou frontu.
-	 * Pouzitim close_queue v $options se fronta na konci volani setObjectParams() uzavre a pristi zapis bude probihat do nove fronty.
-	 */
-	function setObjectParams($values=array(),$options=array()) {
-		$options += array(
-			"close_queue" => false,
-			"key" => null,
-		);
-
-		if (isset($options["key"])) {
-			if (!array_key_exists($options["key"], $this->dataLayer)) {
-				$this->dataLayer[$options["key"]] = array();
-			}
-			$this->dataLayer[$options["key"]] = array_merge($this->dataLayer[$options["key"]],$values);
-		} else {
-			$this->dataLayerObject = array_merge($this->dataLayerObject, $values);
-		}
-
-		if ($options["close_queue"]) {
-			$this->closeQueue();
-		}
-	}
-
-	function closeQueue($params=array()) {
-		$params += array(
-			"key" => null,
-		);
-		if ($this->dataLayerObject) {
-			$this->dataLayer[] = $this->dataLayerObject;
-			$this->dataLayerObject = array();
-		}
-	}
-
-	/**
 	 * Vrati vsechny zpravy jako pole.
 	 * Pred tim uzavre posledni docasnou frontu a vrati vse.
 	 *
@@ -114,7 +77,6 @@ class GoogleTagManager {
 		$options += [
 			"format" => "raw",
 		];
-		$this->closeQueue();
 
 		$_dl = $this->dataLayer;
 
@@ -255,28 +217,18 @@ class GoogleTagManager {
 		}
 
 		$_ecommerce_messages = [];
-		foreach($this->ecommerce_measurements as $i) {
-			if ($products = $i->getDataLayerMessage()) {
-				$_ecommerce_messages[] = $products;
+		foreach($this->ecommerce_measurements as $m) {
+			if ($message = $m->getDataLayerMessage()) {
+				if ($_event = $m->getEvent()) {
+					$message["event"] = $_event;
+				}
+				if ($_actionField = $m->getActionField()) {
+					$message["ecommerce"][$m->getActivity()]["actionField"] = $_actionField;
+				}
+				$_ecommerce_messages[] = $message;
 			}
 		}
 		return $_ecommerce_messages;
-	}
-
-	function &getCurrentQueue($options=array()) {
-		$options += array(
-			"key" => null,
-		);
-		$null = null;
-		if (isset($options["key"])) {
-			if (!array_key_exists($options["key"], $this->dataLayer)) {
-				return $this->dataLayer[$options["key"]];
-			} else {
-				return $null;
-			}
-		} else {
-			return $this->dataLayerObject;
-		}
 	}
 
 	/**

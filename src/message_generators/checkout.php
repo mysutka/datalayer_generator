@@ -1,18 +1,14 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
-use GoogleTagManager\DatalayerGenerator;
 
 class Checkout extends ActionBase implements iMessage {
 
 	function __construct($object, $options=[]) {
 		$options += [
 			"event" => "checkout",
+			"activity" => "checkout",
 		];
 		parent::__construct($object, $options);
-	}
-
-	function getActivity() {
-		return "checkout";
 	}
 
 	function getDatalayerMessage() {
@@ -29,16 +25,16 @@ class Checkout extends ActionBase implements iMessage {
 			"ecommerce" => [
 				"${_activity}" => [
 					"products" => $_productsAr,
-					"actionField" => [
-						"step" => 1,
-						"option" => "Visa",
-					],
 				],
 			],
 		];
-		if ($_event = $this->getEvent()) {
-			$out["event"] = $_event;
-		}
 		return $out;
+	}
+
+	function getActionField() {
+		return [
+			"step" => 1,
+			"option" => "Visa",
+		];
 	}
 }

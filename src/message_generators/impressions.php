@@ -1,18 +1,14 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
-use GoogleTagManager\DatalayerGenerator;
 
 class Impressions extends ActionBase implements iMessage {
 
 	function __construct($object, $options=[]) {
 		$options += [
-			"event" => "impressions",
+#			"event" => "impressions",
+			"activity" => "impressions",
 		];
 		parent::__construct($object, $options);
-	}
-
-	function getActivity() {
-		return "impressions";
 	}
 
 	function getDatalayerMessage() {
@@ -24,9 +20,6 @@ class Impressions extends ActionBase implements iMessage {
 				"${_activity}" => [$objDT->getData($this->getObject())],
 			],
 		];
-		if ($_event = $this->getEvent()) {
-			$out["event"] = $_event;
-		}
 		return $out;
 
 	}

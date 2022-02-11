@@ -1,12 +1,13 @@
 <?php
 namespace GoogleTagManager\MessageGenerators;
+use GoogleTagManager\DatalayerGenerator;
 
-class Purchase extends ActionBase implements iMessage {
+class Add extends ActionBase implements iMessage {
 
 	function __construct($object, $options=[]) {
 		$options += [
-#			"event" => "purchase",
-			"activity" => "purchase",
+			"event" => "addToCart",
+			"activity" => "add",
 		];
 		parent::__construct($object, $options);
 	}
@@ -32,15 +33,5 @@ class Purchase extends ActionBase implements iMessage {
 			],
 		];
 		return $out;
-	}
-
-	function getActionField() {
-		return [
-			"id" => "order#no",
-			"affiliation" => "Example e-shop",
-			"revenue" => "102", # items price without vat
-			"tax" => "21.5",
-			"shipping" => "99"
-		];
 	}
 }
