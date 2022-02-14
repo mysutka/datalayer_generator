@@ -15,6 +15,7 @@ class ActionBase {
 		$options += [
 			"xhr" => false,
 			"event" => null,
+			"activity" => null,
 		];
 		$this->object = $object;
 		$this->options = $options;
@@ -50,7 +51,13 @@ class ActionBase {
 		if (get_called_class() == get_class()) {
 			trigger_error(sprintf("%s: do not use this class directly", get_called_class()));
 		}
-		return [];
+		$_activity = $this->getActivity();
+		$out = [
+			"ecommerce" => [
+				"${_activity}" => $this->getActivityData(),
+			],
+		];
+		return $out;
 	}
 }
 

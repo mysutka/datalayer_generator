@@ -11,17 +11,9 @@ class Impressions extends ActionBase implements iMessage {
 		parent::__construct($object, $options);
 	}
 
-	function getDatalayerMessage() {
-		parent::getDatalayerMessage();
+	function getActivityData() {
 		$objDT = \GoogleTagManager::GetImpressionClass();
-		$_activity = $this->getActivity();
-		$out = [
-			"ecommerce" => [
-				"${_activity}" => [$objDT->getData($this->getObject())],
-			],
-		];
-		return $out;
-
+		return [$objDT->getData($this->getObject())];
 	}
 
 	function getIdsMap() {

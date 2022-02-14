@@ -11,26 +11,15 @@ class Promotion extends ActionBase implements iMessage {
 		parent::__construct($object, $options);
 	}
 
-	/**
-	 * @todo use GoogleTagManager::splitObject()
-	 */
-	function getDatalayerMessage() {
-		parent::getDatalayerMessage();
+
+	function getActivityData() {
 		$objDT = \GoogleTagManager::GetPromotionClass();
-		$_activity = $this->getActivity();
 		$_objects = $this->getObject();
 		is_object($_objects) && ($_objects = [$_objects]);
 		$_productsAr = [];
 		foreach($_objects as $_o) {
 			$_productsAr[] = $objDT->getData($_o);
 		}
-		$out = [
-			"ecommerce" => [
-				"${_activity}" => [
-					"promotions" => $_productsAr,
-				],
-			],
-		];
-		return $out;
+		return ["promotions" => $_productsAr];
 	}
 }

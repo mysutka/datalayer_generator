@@ -11,27 +11,15 @@ class Purchase extends ActionBase implements iMessage {
 		parent::__construct($object, $options);
 	}
 
-	/**
-	 * @todo actionField
-	 */
-	function getDatalayerMessage() {
-		parent::getDatalayerMessage();
+	function getActivityData() {
 		$objDT = \GoogleTagManager::GetProductClass();
-		$_activity = $this->getActivity();
 		$_objects = $this->getObject();
 		is_object($_objects) && ($_objects = [$_objects]);
 		$_productsAr = [];
 		foreach($_objects as $_o) {
 			$_productsAr[] = $objDT->getData($_o);
 		}
-		$out = [
-			"ecommerce" => [
-				"${_activity}" => [
-					"products" => $_productsAr,
-				],
-			],
-		];
-		return $out;
+		return ["products" => $_productsAr];
 	}
 
 	function getActionField() {
