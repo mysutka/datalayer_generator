@@ -281,4 +281,43 @@ class GoogleTagManager {
 	static function GetPromotionClass() {
 		return self::$Instance->promotionClass;
 	}
+
+	/**
+	 * Prida do fronty merenych udalosti dalsi hodnoty.
+	 *
+	 * Vetsinou se uklada vse do jedne fronty. Opakovane pouziti setObjectParams() tedy stale uklada hodnoty do jedne fronty.
+	 * Pro nektera mereni je treba vytvorit novou frontu.
+	 * Pouzitim close_queue v $options se fronta na konci volani setObjectParams() uzavre a pristi zapis bude probihat do nove fronty.
+	 *
+	 * @obsolete
+	 */
+	function setObjectParams($values=array(),$options=array()) {
+		$options += array(
+			"close_queue" => false,
+			"key" => null,
+		);
+
+		if (isset($options["key"])) {
+			if (!array_key_exists($options["key"], $this->dataLayer)) {
+				$this->dataLayer[$options["key"]] = array();
+			}
+			$this->dataLayer[$options["key"]] = array_merge($this->dataLayer[$options["key"]],$values);
+		} else {
+			$this->dataLayerObject = array_merge($this->dataLayerObject, $values);
+		}
+
+		if ($options["close_queue"]) {
+			$this->closeQueue();
+		}
+	}
+
+	function closeQueue($params=array()) {
+		$params += array(
+			"key" => null,
+		);
+		if ($this->dataLayerObject) {
+			$this->dataLayer[] = $this->dataLayerObject;
+			$this->dataLayerObject = array();
+		}
+	}
 }
