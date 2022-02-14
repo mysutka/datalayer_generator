@@ -11,6 +11,16 @@ class Purchase extends ActionBase implements iMessage {
 		parent::__construct($object, $options);
 	}
 
+	/**
+	 * We need some additional values under the ecommerce object, so we override the method and append the value.
+	 * In this case it is the 'currencyCode'.
+	 */
+	function getDatalayerMessage() {
+		$out = parent::getDatalayerMessage();
+		$out["ecommerce"]["currencyCode"] = "EUR";
+		return $out;
+	}
+
 	function getActivityData() {
 		$objDT = \GoogleTagManager::GetProductClass();
 		$_objects = $this->getObject();
