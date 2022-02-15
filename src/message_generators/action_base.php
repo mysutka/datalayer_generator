@@ -1,6 +1,7 @@
 <?php
 /**
  * Base class for generators
+ * For enhanced ecommerce.
  */
 namespace GoogleTagManager\MessageGenerators;;
 
@@ -9,6 +10,7 @@ class ActionBase {
 	 * @param array $options
 	 * - xhr - render in xhr requests [default: false]
 	 * - event - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
+	 * - activity
 	 */
 	function __construct($object, $options=[]) {
 

@@ -8,6 +8,7 @@ function smarty_function_gtm_datalayer($params, $template) {
 	$out = [];
 
 	$gtm = $smarty->getTemplateVars("gtm");
+	$request = $smarty->getTemplateVars("request");
 	if (!$gtm) {
 		return "";
 	}
@@ -18,5 +19,9 @@ function smarty_function_gtm_datalayer($params, $template) {
 		$out[] = "dataLayer.push($msg);\n";
 	}
 
-	return smarty_block_javascript_tag($params, join("\n", $out), $template, $repeat);
+	if ($request->xhr()) {
+		return join("\n", $out);
+	} else {
+		return smarty_block_javascript_tag($params, join("\n", $out), $template, $repeat);
+	}
 }
