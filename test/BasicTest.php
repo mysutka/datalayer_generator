@@ -4,6 +4,13 @@
  */
 class BasicTest extends PHPUnit\Framework\TestCase {
 
+	/*
+	public function test_idea() {
+		$instance = new Datalayer::GoogleTagManager();
+		$instance->push(new Datalayer\Analytics\EnhancedEcommerce\Purchase());
+	}
+	 */
+
 	public function test_empty_datalayer() {
 		$instance = GoogleTagManager::GetInstance();
 		$this->assertNotNull($instance);

@@ -64,6 +64,32 @@ class GoogleTagManager {
 	}
 
 	/**
+	 * Pridani bezneho ecommerce objektu do seznamu
+	 */
+	function measureEcommerceObject(GoogleTagManager\MessageGenerators\ActionBase $ecObject) {
+		$this->ecommerce_measurements[] = $ecObject;
+	}
+
+	/**
+	 * Mereni nestandardniho objektu
+	 */
+	function measureOtherObject(DatalayerGenerator $object) {
+		$this->ecommerce_additional_objects[] = $object;
+	}
+
+	/**
+	 *
+	 * Single method for any data to send to dataLayer
+	 */
+	function push($array_or_object) {
+		if (is_array($array_or_object)) {
+			$this->dataLayer[] = $array_or_object;
+		} else {
+			return $this->measureEcommerceObject($array_or_object);
+		}
+	}
+
+	/**
 	 * Vrati vsechny zpravy jako pole.
 	 * Pred tim uzavre posledni docasnou frontu a vrati vse.
 	 *
@@ -98,6 +124,76 @@ class GoogleTagManager {
 			$_dl = array_map('json_encode', $_dl);
 		}
 		return $_dl;
+	}
+
+	function getDataLayerMessagesJson() {
+		return $this->getDataLayerMessages(["format" => "json"]);
+	}
+
+	/**
+	 * Alias to getDataLayerMessages.
+	 *
+	 * @internal for backward compatibility
+	 */
+	function getDataLayer($options=[]) {
+		return $this->getDataLayerMessages($options);
+	}
+
+	protected function getMeasurements() {
+		if (!$this->ecommerce_measurements) {
+			return null;
+		}
+
+		$_ecommerce_messages = [];
+		foreach($this->ecommerce_measurements as $m) {
+			if ($message = $m->getDataLayerMessage()) {
+				if ($_event = $m->getEvent()) {
+					$message["event"] = $_event;
+				}
+				if ($_actionField = $m->getActionField()) {
+					$message["ecommerce"][$m->getActivity()]["actionField"] = $_actionField;
+				}
+				$_ecommerce_messages[] = $message;
+			}
+		}
+		return $_ecommerce_messages;
+	}
+
+	/**
+	 * Zjisti aktualni uri
+	 */
+	function getUri() {
+		if (is_null($this->controller)) {
+			return "";
+		}
+		return $this->controller->request->getUri();
+	}
+
+	/**
+	 * Nastaveni generatoru zakladnich typu (impression data, product data, promotion data, action data)
+	 */
+	static function SetImpressionClass(GoogleTagManager\Datatypes\ecDatatype $impressionClass) {
+		self::$Instance->impressionClass = $impressionClass;
+	}
+
+	static function SetProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
+		self::$Instance->productClass = $productClass;
+	}
+
+	static function setPromotionClass(GoogleTagManager\Datatypes\ecDatatype $promotionClass) {
+		self::$Instance->promotionClass = $promotionClass;
+	}
+
+	static function GetImpressionClass() {
+		return self::$Instance->impressionClass;
+	}
+
+	static function GetProductClass() {
+		return self::$Instance->productClass;
+	}
+
+	static function GetPromotionClass() {
+		return self::$Instance->promotionClass;
 	}
 
 	/**
@@ -158,19 +254,6 @@ class GoogleTagManager {
 		return $_splittedObjects;
 	}
 
-	function getDataLayerMessagesJson() {
-		return $this->getDataLayerMessages(["format" => "json"]);
-	}
-
-	/**
-	 * Alias to getDataLayerMessages.
-	 *
-	 * @internal for backward compatibility
-	 */
-	function getDataLayer($options=[]) {
-		return $this->getDataLayerMessages($options);
-	}
-
 	/**
 	 * Vrati data, ktera se budou odesilat pri kliknuti na odkaz produktu.
 	 *
@@ -209,115 +292,5 @@ class GoogleTagManager {
 
 	function getProductsDataJson() {
 		return $this->getProductsData(["format" => "json"]);
-	}
-
-	protected function getMeasurements() {
-		if (!$this->ecommerce_measurements) {
-			return null;
-		}
-
-		$_ecommerce_messages = [];
-		foreach($this->ecommerce_measurements as $m) {
-			if ($message = $m->getDataLayerMessage()) {
-				if ($_event = $m->getEvent()) {
-					$message["event"] = $_event;
-				}
-				if ($_actionField = $m->getActionField()) {
-					$message["ecommerce"][$m->getActivity()]["actionField"] = $_actionField;
-				}
-				$_ecommerce_messages[] = $message;
-			}
-		}
-		return $_ecommerce_messages;
-	}
-
-	/**
-	 * Zjisti aktualni uri
-	 */
-	function getUri() {
-		if (is_null($this->controller)) {
-			return "";
-		}
-		return $this->controller->request->getUri();
-	}
-
-	/**
-	 * Pridani bezneho ecommerce objektu do seznamu
-	 */
-	function measureEcommerceObject(GoogleTagManager\MessageGenerators\ActionBase $ecObject) {
-		$this->ecommerce_measurements[] = $ecObject;
-	}
-
-	/**
-	 * Mereni nestandardniho objektu
-	 */
-	function measureOtherObject(DatalayerGenerator $object) {
-		$this->ecommerce_additional_objects[] = $object;
-	}
-
-	/**
-	 * Nastaveni generatoru zakladnich typu (impression data, product data, promotion data, action data)
-	 */
-	static function SetImpressionClass(GoogleTagManager\Datatypes\ecDatatype $impressionClass) {
-		self::$Instance->impressionClass = $impressionClass;
-	}
-
-	static function SetProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
-		self::$Instance->productClass = $productClass;
-	}
-
-	static function setPromotionClass(GoogleTagManager\Datatypes\ecDatatype $promotionClass) {
-		self::$Instance->promotionClass = $promotionClass;
-	}
-
-	static function GetImpressionClass() {
-		return self::$Instance->impressionClass;
-	}
-
-	static function GetProductClass() {
-		return self::$Instance->productClass;
-	}
-
-	static function GetPromotionClass() {
-		return self::$Instance->promotionClass;
-	}
-
-	/**
-	 * Prida do fronty merenych udalosti dalsi hodnoty.
-	 *
-	 * Vetsinou se uklada vse do jedne fronty. Opakovane pouziti setObjectParams() tedy stale uklada hodnoty do jedne fronty.
-	 * Pro nektera mereni je treba vytvorit novou frontu.
-	 * Pouzitim close_queue v $options se fronta na konci volani setObjectParams() uzavre a pristi zapis bude probihat do nove fronty.
-	 *
-	 * @obsolete
-	 */
-	function setObjectParams($values=array(),$options=array()) {
-		$options += array(
-			"close_queue" => false,
-			"key" => null,
-		);
-
-		if (isset($options["key"])) {
-			if (!array_key_exists($options["key"], $this->dataLayer)) {
-				$this->dataLayer[$options["key"]] = array();
-			}
-			$this->dataLayer[$options["key"]] = array_merge($this->dataLayer[$options["key"]],$values);
-		} else {
-			$this->dataLayerObject = array_merge($this->dataLayerObject, $values);
-		}
-
-		if ($options["close_queue"]) {
-			$this->closeQueue();
-		}
-	}
-
-	function closeQueue($params=array()) {
-		$params += array(
-			"key" => null,
-		);
-		if ($this->dataLayerObject) {
-			$this->dataLayer[] = $this->dataLayerObject;
-			$this->dataLayerObject = array();
-		}
 	}
 }
