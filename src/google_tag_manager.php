@@ -1,7 +1,7 @@
 <?php
 namespace DatalayerGenerator;
 
-use GoogleTagManager\DatalayerGenerator;
+use DatalayerGenerator\Datatypes\EcDatatype;
 
 /**
  * Obecna trida pro predavani zprav do dataLayer pro GTM.
@@ -41,7 +41,11 @@ class GoogleTagManager {
 	 * @param array $options
 	 */
 	static function &GetInstance($controller=null, $options=array()) {
-		$options += array();
+		$options += [
+			"product_class_name" => "\DatalayerGenerator\Datatypes\Product",
+			"impression_class_name" => "\DatalayerGenerator\Datatypes\Impression",
+			"promotion_class_name" => "\DatalayerGenerator\Datatypes\Promotion",
+		];
 
 		if (!isset(self::$Instance)) {
 			self::$Instance = new static();
@@ -53,6 +57,10 @@ class GoogleTagManager {
 		if ($controller) {
 			$controller->tpl_data["gtm"] = self::$Instance;
 		}
+
+		EcDatatype::SetProductClassName($options["product_class_name"]);
+		EcDatatype::SetImpressionClassName($options["impression_class_name"]);
+		EcDatatype::SetPromotionClassName($options["promotion_class_name"]);
 
 		return self::$Instance;
 	}
