@@ -13,7 +13,7 @@ abstract class EcProduct extends EcDatatype {
 		$out = [
 			"name" =>  $this->getProductName(),       // Name or ID is required.
 			"id" =>  $this->getProductId(),
-			"price" => "123.5 CZK",
+			"price" => $this->getProductPrice(),
 			"brand" => $this->getProductBrand(),
 			"category" =>  $this->getProductCategory(),
 			"variant" => $this->getProductVariant(),
@@ -27,4 +27,5 @@ abstract class EcProduct extends EcDatatype {
 	abstract function getProductBrand();
 	abstract function getProductCategory();
 	abstract function getProductVariant();
+	abstract function getProductPrice();
 }

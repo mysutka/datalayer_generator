@@ -29,4 +29,8 @@ class Product extends EcProduct {
 	public function getProductCategory() {
 		return "Example/Shoes/Sport";
 	}
+
+	public function getProductPrice() {
+		return 24.5;
+	}
 }

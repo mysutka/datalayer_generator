@@ -15,6 +15,7 @@ class CustomBuilderTest extends TestBase {
 			"brand" => "Brownies",
 			"variant" => "Wide",
 			"category" => null,
+			"price" => 12.5,
 		];
 		$instance->measureEcommerceObject(new \DatalayerGenerator\MessageGenerators\ProductDetail($product));
 		$this->_test_basic($instance, ["activity" => "detail", "event" => null, "debug" => !true]);
@@ -49,6 +50,7 @@ class CustomBuilderTest extends TestBase {
 		$this->assertEquals("Shorts with stripe", $product_data["name"]);
 		$this->assertEquals("Brownies", $product_data["brand"]);
 		$this->assertEquals("Wide", $product_data["variant"]);
+		$this->assertEquals(12.5, $product_data["price"]);
 		$this->assertArrayNotHasKey("category", $product_data);
 	}
 
@@ -143,11 +145,12 @@ class DatatypePromotionBuilder extends \DatalayerGenerator\Datatypes\EcPromotion
 
 class DatatypeProductBuilder extends \DatalayerGenerator\Datatypes\EcProduct {
 
-	public function getProductId(){ return $this->getObject()["id"]; /*"shorts-01-wi";*/ }
+	public function getProductId(){ return $this->getObject()["id"]; }
 	public function getProductName(){ return $this->getObject()["name"]; }
 	public function getProductBrand(){ return $this->getObject()["brand"]; }
 	public function getProductVariant(){ return $this->getObject()["variant"]; }
 	public function getProductCategory(){ return $this->getObject()["category"]; }
+	public function getProductPrice(){ return $this->getObject()["price"]; }
 }
 
 class DatatypeImpressionBuilder extends \DatalayerGenerator\Datatypes\EcImpression {
