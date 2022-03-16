@@ -3,14 +3,14 @@
  * Base class for generators
  * For enhanced ecommerce.
  */
-namespace GoogleTagManager\MessageGenerators;;
+namespace DatalayerGenerator\MessageGenerators;
 
 class ActionBase {
 	/**
 	 * @param array $options
 	 * - xhr - render in xhr requests [default: false]
 	 * - event - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
-	 * - activity
+	 * - activity - enhanced ecommerce activity: impressions, click, detail, add, remove, promoView, promoClick, checkout, purchase, refund etc..
 	 */
 	function __construct($object, $options=[]) {
 
@@ -45,9 +45,9 @@ class ActionBase {
 		return null;
 	}
 
-	function getDatalayerMessage() {
-		/* Hlasku vypsat jen kdyz je volana trida DatalayerGenerator nebo kdyz volana trida nema metodu getDatalayerMessage()
-		if (get_called_class() == get_class() || !in_array("getDatalayerMessage" , get_class_methods(get_called_class()))) {
+	function getDataLayerMessage() {
+		/* Hlasku vypsat jen kdyz je volana trida DatalayerGenerator nebo kdyz volana trida nema metodu getDataLayerMessage()
+		if (get_called_class() == get_class() || !in_array("getDataLayerMessage" , get_class_methods(get_called_class()))) {
 		}
 		 */
 		if (get_called_class() == get_class()) {

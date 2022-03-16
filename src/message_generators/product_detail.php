@@ -1,5 +1,5 @@
 <?php
-namespace GoogleTagManager\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators;
 
 class ProductDetail extends ActionBase implements iMessage {
 
@@ -12,12 +12,10 @@ class ProductDetail extends ActionBase implements iMessage {
 	}
 
 	function getActivityData() {
-		$objDT = \GoogleTagManager::GetProductClass();
-		$_objects = $this->getObject();
-		is_object($_objects) && ($_objects = [$_objects]);
+		$objDT = \DatalayerGenerator\Datatypes\ecDatatype::CreateProduct($this->getObject());
 		$_productsAr = [];
-		foreach($_objects as $_o) {
-			$_productsAr[] = $objDT->getData($_o);
+		if ($_data = $objDT->getData()) {
+			$_productsAr[] = $_data;
 		}
 		return ["products" => $_productsAr];
 	}

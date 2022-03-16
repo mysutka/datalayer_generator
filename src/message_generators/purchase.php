@@ -1,5 +1,5 @@
 <?php
-namespace GoogleTagManager\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators;
 
 class Purchase extends ActionBase implements iMessage {
 
@@ -15,19 +15,28 @@ class Purchase extends ActionBase implements iMessage {
 	 * We need some additional values under the ecommerce object, so we override the method and append the value.
 	 * In this case it is the 'currencyCode'.
 	 */
-	function getDatalayerMessage() {
-		$out = parent::getDatalayerMessage();
+	function getDataLayerMessage() {
+		$out = parent::getDataLayerMessage();
 		$out["ecommerce"]["currencyCode"] = "EUR";
 		return $out;
 	}
 
+	/**
+	 * should return order items.
+	 */
+	function getObject() {
+		return [
+			[],
+			[],
+		];
+	}
+
 	function getActivityData() {
-		$objDT = \GoogleTagManager::GetProductClass();
 		$_objects = $this->getObject();
-		is_object($_objects) && ($_objects = [$_objects]);
 		$_productsAr = [];
 		foreach($_objects as $_o) {
-			$_productsAr[] = $objDT->getData($_o);
+			$objDT = \DatalayerGenerator\Datatypes\EcDatatype::CreateProduct($_o);
+			$_productsAr[] = $objDT->getData();
 		}
 		return ["products" => $_productsAr];
 	}

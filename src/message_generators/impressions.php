@@ -1,5 +1,5 @@
 <?php
-namespace GoogleTagManager\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators;
 
 class Impressions extends ActionBase implements iMessage {
 
@@ -12,11 +12,19 @@ class Impressions extends ActionBase implements iMessage {
 	}
 
 	function getActivityData() {
-		$objDT = \GoogleTagManager::GetImpressionClass();
-		return [$objDT->getData($this->getObject())];
+		$out = [];
+		foreach($this->getObject() as $_o) {
+			$objDT = \DatalayerGenerator\Datatypes\EcDatatype::CreateImpression($_o);
+			if ($_out = $objDT->getData()) {
+				$out[] = $_out;
+			}
+		}
+		return $out;
 	}
 
+	/*
 	function getIdsMap() {
 		return [];
 	}
+	 */
 }

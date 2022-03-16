@@ -1,5 +1,5 @@
 <?php
-namespace GoogleTagManager\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators;
 
 interface iMessage {
 
@@ -10,5 +10,6 @@ interface iMessage {
 	 * - promotion data: promotions
 	 */
 #	public function getEcommerceMeasurement();
-	public function getDatalayerMessage();
+#	public function getDataLayerMessage();
+	public function getActivityData();
 }

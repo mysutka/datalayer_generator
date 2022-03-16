@@ -1,4 +1,5 @@
 <?php
+namespace DatalayerGenerator;
 
 use GoogleTagManager\DatalayerGenerator;
 
@@ -23,23 +24,20 @@ use GoogleTagManager\DatalayerGenerator;
 class GoogleTagManager {
 
 	private static $Instance = null;
-	var $dataLayer = array();
-	var $dataLayerObject = array();
+	var $dataLayer = [];
 
 	var $controller = null;
 
 	var $ecommerce_measurements = [];
 
-	var $ecommerce_additional_objects = [];
-
 	private function __construct() { }
 	private function __clone() { }
 	public function __wakeup() { }
 
-
 	/**
 	 *
 	 *
+	 * @param Atk14Controller $controller
 	 * @param array $options
 	 */
 	static function &GetInstance($controller=null, $options=array()) {
@@ -56,25 +54,14 @@ class GoogleTagManager {
 			$controller->tpl_data["gtm"] = self::$Instance;
 		}
 
-		# set default datatypes class names
-		\GoogleTagManager::SetProductClass(new GoogleTagManager\Datatypes\Product());
-		\GoogleTagManager::SetPromotionClass(new GoogleTagManager\Datatypes\Promotion);
-		\GoogleTagManager::SetImpressionClass(new GoogleTagManager\Datatypes\Impression());
 		return self::$Instance;
 	}
 
 	/**
 	 * Pridani bezneho ecommerce objektu do seznamu
 	 */
-	function measureEcommerceObject(GoogleTagManager\MessageGenerators\ActionBase $ecObject) {
+	function measureEcommerceObject(\DatalayerGenerator\MessageGenerators\ActionBase $ecObject) {
 		$this->ecommerce_measurements[] = $ecObject;
-	}
-
-	/**
-	 * Mereni nestandardniho objektu
-	 */
-	function measureOtherObject(DatalayerGenerator $object) {
-		$this->ecommerce_additional_objects[] = $object;
 	}
 
 	/**
@@ -111,12 +98,6 @@ class GoogleTagManager {
 		if ($measurements = $this->getMeasurements()) {
 			foreach($measurements as $_ip) {
 				$_dl[] = $_ip;
-			}
-		}
-
-		foreach($this->ecommerce_additional_objects as $_obj) {
-			if ($_msg = $_obj->getDataLayerMessage()) {
-				$_dl[] = $_msg;
 			}
 		}
 
@@ -167,33 +148,6 @@ class GoogleTagManager {
 			return "";
 		}
 		return $this->controller->request->getUri();
-	}
-
-	/**
-	 * Nastaveni generatoru zakladnich typu (impression data, product data, promotion data, action data)
-	 */
-	static function SetImpressionClass(GoogleTagManager\Datatypes\ecDatatype $impressionClass) {
-		self::$Instance->impressionClass = $impressionClass;
-	}
-
-	static function SetProductClass(GoogleTagManager\Datatypes\ecDatatype $productClass) {
-		self::$Instance->productClass = $productClass;
-	}
-
-	static function setPromotionClass(GoogleTagManager\Datatypes\ecDatatype $promotionClass) {
-		self::$Instance->promotionClass = $promotionClass;
-	}
-
-	static function GetImpressionClass() {
-		return self::$Instance->impressionClass;
-	}
-
-	static function GetProductClass() {
-		return self::$Instance->productClass;
-	}
-
-	static function GetPromotionClass() {
-		return self::$Instance->promotionClass;
 	}
 
 	/**
@@ -292,5 +246,14 @@ class GoogleTagManager {
 
 	function getProductsDataJson() {
 		return $this->getProductsData(["format" => "json"]);
+	}
+
+	/**
+	 * Mereni nestandardniho objektu
+	 *
+	 * @obsolete
+	 */
+	function measureOtherObject(DatalayerGenerator $object) {
+		return $this->measureEcommerceObject($object);
 	}
 }
