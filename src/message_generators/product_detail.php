@@ -12,7 +12,7 @@ class ProductDetail extends ActionBase implements iMessage {
 	}
 
 	function getActivityData() {
-		$objDT = \DatalayerGenerator\Datatypes\ecDatatype::CreateProduct($this->getObject());
+		$objDT = \DatalayerGenerator\Datatypes\ecDatatype::CreateProduct($this->getObject(), $this->options);
 		$_productsAr = [];
 		if ($_data = $objDT->getData()) {
 			$_productsAr[] = $_data;

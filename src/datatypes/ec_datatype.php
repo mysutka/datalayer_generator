@@ -21,14 +21,14 @@ class EcDatatype {
 		return new $class_name($object, $options);
 	}
 
-	static function CreatePromotion($object) {
+	static function CreatePromotion($object, $options=[]) {
 		$class_name = static::$PromotionClassName;
-		return new $class_name($object);
+		return new $class_name($object, $options);
 	}
 
-	static function CreateProduct($object) {
+	static function CreateProduct($object, $options=[]) {
 		$class_name = static::$ProductClassName;
-		return new $class_name($object);
+		return new $class_name($object, $options);
 	}
 
 	static function SetProductClassName($class_name) {
