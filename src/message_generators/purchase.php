@@ -21,10 +21,7 @@ class Purchase extends ActionBase implements iMessage {
 		return $out;
 	}
 
-	/**
-	 * should return order items.
-	 */
-	function getObject() {
+	function getObjectItems() {
 		return [
 			[],
 			[],
@@ -34,7 +31,7 @@ class Purchase extends ActionBase implements iMessage {
 	function getActivityData() {
 		$_objects = $this->getObject();
 		$_productsAr = [];
-		foreach($_objects as $_o) {
+		foreach($this->getObjectItems() as $_o) {
 			$objDT = \DatalayerGenerator\Datatypes\EcDatatype::CreateProduct($_o);
 			$_productsAr[] = $objDT->getData();
 		}

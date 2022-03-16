@@ -121,6 +121,10 @@ class CustomBuilderTest extends TestBase {
 		$this->assertArrayHasKey("position", $obj["ecommerce"]["impressions"][0]);
 		$this->assertArrayHasKey("price", $obj["ecommerce"]["impressions"][0]);
 
+		$this->assertCount(2, $obj["ecommerce"]["impressions"]);
+		$this->assertEquals(1, $obj["ecommerce"]["impressions"][0]["position"]);
+		$this->assertEquals(2, $obj["ecommerce"]["impressions"][1]["position"]);
+
 		$product_data = $obj["ecommerce"]["impressions"][0];
 		$this->assertEquals("shorts-01-wi", $product_data["id"]);
 		$this->assertEquals("Shorts with stripe", $product_data["name"]);
@@ -154,6 +158,6 @@ class DatatypeImpressionBuilder extends \DatalayerGenerator\Datatypes\EcImpressi
 	public function getImpressionVariant(){ return "Wide"; }
 	public function getImpressionCategory(){ return "Underwear/Striped shorts"; }
 	public function getImpressionList() { return "category"; }
-	public function getImpressionPosition() { return 1; }
+	public function getImpressionPosition() { return $this->options["position"]; }
 	public function getImpressionPrice() { return 5.5; }
 }

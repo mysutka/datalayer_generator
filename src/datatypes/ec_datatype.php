@@ -7,17 +7,18 @@ class EcDatatype {
 	static $ImpressionClassName = "\DatalayerGenerator\Datatypes\Impression";
 	static $PromotionClassName = "\DatalayerGenerator\Datatypes\Promotion";
 
-	public function __construct($object = null) {
+	public function __construct($object = null, $options=[]) {
 		$this->object = $object;
+		$this->options = $options;
 	}
 
 	protected function getObject() {
 		return $this->object;
 	}
 
-	static function CreateImpression($object) {
+	static function CreateImpression($object, $options=[]) {
 		$class_name = static::$ImpressionClassName;
-		return new $class_name($object);
+		return new $class_name($object, $options);
 	}
 
 	static function CreatePromotion($object) {
