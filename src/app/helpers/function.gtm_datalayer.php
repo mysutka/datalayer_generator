@@ -2,6 +2,12 @@
 
 Atk14Require::Helper("block.javascript_tag");
 
+/**
+ * @param array $params
+ * - format
+ * 	- js [default] - sequence of javascript commands ( dataLayer.push( {...} ) )
+ * 	- json - array of json objects to be sent to datalayer by custom code
+ */
 function smarty_function_gtm_datalayer($params, $template) {
 	$params += [
 		"format" => "js",
@@ -21,7 +27,7 @@ function smarty_function_gtm_datalayer($params, $template) {
 		$out[] = "var dataLayer = window.dataLayer || [];";
 	}
 	if ($params["format"]==="json") {
-		return join("\n", $gtm->getDataLayerMessagesJson());
+		return json_encode($gtm->getDataLayerMessages());
 	}
 	foreach($gtm->getDataLayerMessagesJson() as $msg) {
 		$out[] = "dataLayer.push($msg);\n";
