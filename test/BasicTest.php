@@ -12,7 +12,7 @@ class BasicTest extends TestBase {
 	 */
 
 	public function test_empty_datalayer() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 		$this->assertNotNull($instance);
 
 		$this->assertEmpty($messages = $instance->getDataLayerMessages());
@@ -20,7 +20,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_product_impressions() {
-		$instance = \DatalayerGenerator\GoogleTagManager::GetInstance();
+		$instance = \DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionsGenerator returns builtin product array
 		$products = ["a", "b", "c"];
@@ -34,7 +34,7 @@ class BasicTest extends TestBase {
 		$obj_json = array_shift($dl_json);
 
 		$this->assertArrayNotHasKey("products", $obj["ecommerce"]["impressions"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["impressions"]);
+		$this->assertIsArray($obj["ecommerce"]["impressions"]);
 		# test prvku pole
 		$this->assertArrayHasKey("id", $obj["ecommerce"]["impressions"][0]);
 		$this->assertArrayHasKey("name", $obj["ecommerce"]["impressions"][0]);
@@ -46,7 +46,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_product_detail() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ProductDetailGenerator returns builtin product array
 		$product = ["a","b"];
@@ -62,8 +62,8 @@ class BasicTest extends TestBase {
 
 		$this->assertArrayHasKey("products", $obj["ecommerce"]["detail"]);
 		$this->assertArrayHasKey("actionField", $obj["ecommerce"]["detail"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["detail"]["products"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["detail"]["actionField"]);
+		$this->assertIsArray($obj["ecommerce"]["detail"]["products"]);
+		$this->assertIsArray($obj["ecommerce"]["detail"]["actionField"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
@@ -82,7 +82,7 @@ class BasicTest extends TestBase {
 
 
 	public function test_datalayer_for_purchase() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -97,8 +97,8 @@ class BasicTest extends TestBase {
 
 		$this->assertArrayHasKey("products", $obj["ecommerce"]["purchase"]);
 		$this->assertArrayHasKey("actionField", $obj["ecommerce"]["purchase"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["purchase"]["products"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["purchase"]["actionField"]);
+		$this->assertIsArray($obj["ecommerce"]["purchase"]["products"]);
+		$this->assertIsArray($obj["ecommerce"]["purchase"]["actionField"]);
 
 
 		# message returned either as array or as json should contain same data
@@ -107,7 +107,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_add() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -122,7 +122,7 @@ class BasicTest extends TestBase {
 
 		$this->assertArrayHasKey("products", $obj["ecommerce"]["add"]);
 		$this->assertArrayNotHasKey("actionField", $obj["ecommerce"]["add"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["add"]["products"]);
+		$this->assertIsArray($obj["ecommerce"]["add"]["products"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
@@ -130,7 +130,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_checkout() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -145,8 +145,8 @@ class BasicTest extends TestBase {
 
 		$this->assertArrayHasKey("products", $obj["ecommerce"]["checkout"]);
 		$this->assertArrayHasKey("actionField", $obj["ecommerce"]["checkout"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["checkout"]["products"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["checkout"]["actionField"]);
+		$this->assertIsArray($obj["ecommerce"]["checkout"]["products"]);
+		$this->assertIsArray($obj["ecommerce"]["checkout"]["actionField"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
@@ -154,7 +154,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_banner_promotions() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a","b"];
@@ -169,7 +169,7 @@ class BasicTest extends TestBase {
 
 		$this->assertArrayHasKey("promotions", $obj["ecommerce"]["promoView"]);
 		$this->assertArrayNotHasKey("products", $obj["ecommerce"]["promoView"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["promoView"]);
+		$this->assertIsArray($obj["ecommerce"]["promoView"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
@@ -194,7 +194,7 @@ class BasicTest extends TestBase {
 		$a = DatalayerGenerator\Datatypes\EcDatatype::CreatePromotion(["a" => 1, "b" => 2]);
 		$this->assertInstanceOf("DatalayerGenerator\Datatypes\Promotion", $a);
 #		error_log(print_r($a,true));
-#		error_log(print_r(GoogleTagManager::GetProductClass(),true));
+#		error_log(print_r(Collector::GetProductClass(),true));
 	}
 }
 

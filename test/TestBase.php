@@ -21,7 +21,7 @@ class TestBase extends PHPUnit\Framework\TestCase {
 		$this->assertNotEmpty($dl = $instance->getDataLayerMessages());
 		$this->assertCount($options["items_count"], $dl);
 		($options["debug"]===true) && print(print_r($dl,true));
-		$this->assertInternalType("array", $obj = array_shift($dl));
+		$this->assertIsArray($obj = array_shift($dl));
 		($options["debug"]===true) && print(print_r($obj,true));
 		# array contains two keys "ecommerce" and "event"
 		$this->assertCount(sizeof($tested_keys), array_keys($obj));
@@ -44,9 +44,9 @@ class TestBase extends PHPUnit\Framework\TestCase {
 		# messages returned as json
 		$this->assertNotEmpty($dl_json = $instance->getDataLayerMessagesJson());
 		$this->assertCount(1, $dl_json);
-		$this->assertInternalType("string", $element = array_shift($dl_json));
+		$this->assertIsString($element = array_shift($dl_json));
 		$this->assertNotNull($obj_json = json_decode($element,true));
-		$this->assertInternalType("array", $obj_json);
+		$this->assertIsArray($obj_json);
 		$this->assertCount(count($tested_keys), array_keys($obj_json));
 		$this->assertSame($tested_keys, array_keys($obj_json));
 		if (is_null($options["event"])) {

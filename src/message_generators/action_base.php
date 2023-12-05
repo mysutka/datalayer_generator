@@ -59,6 +59,14 @@ class ActionBase {
 				"${_activity}" => $this->getActivityData(),
 			],
 		];
+
+		if ($_event = $this->getEvent()) {
+			$out["event"] = $_event;
+		}
+		if ($_actionField = $this->getActionField()) {
+			$out["ecommerce"][$this->getActivity()]["actionField"] = $_actionField;
+		}
+
 		return $out;
 	}
 }

@@ -16,9 +16,9 @@ function smarty_function_gtm_datalayer($params, $template) {
 
 	$out = [];
 
-	$gtm = $smarty->getTemplateVars("gtm");
+	$datalayer = $smarty->getTemplateVars("datalayer");
 	$request = $smarty->getTemplateVars("request");
-	if (!$gtm) {
+	if (!$datalayer) {
 		return "";
 	}
 
@@ -27,9 +27,9 @@ function smarty_function_gtm_datalayer($params, $template) {
 		$out[] = "var dataLayer = window.dataLayer || [];";
 	}
 	if ($params["format"]==="json") {
-		return json_encode($gtm->getDataLayerMessages());
+		return json_encode($datalayer->getDataLayerMessages());
 	}
-	foreach($gtm->getDataLayerMessagesJson() as $msg) {
+	foreach($datalayer->getDataLayerMessagesJson() as $msg) {
 		$out[] = "dataLayer.push($msg);\n";
 	}
 
