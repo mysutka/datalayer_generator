@@ -45,7 +45,6 @@ class Collector {
 			"product_class_name" => "\DatalayerGenerator\Datatypes\Product",
 			"impression_class_name" => "\DatalayerGenerator\Datatypes\Impression",
 			"promotion_class_name" => "\DatalayerGenerator\Datatypes\Promotion",
-#			"tracker_type" => "ua", # ua, ga4
 		];
 
 		if (!isset(self::$Instance)) {
