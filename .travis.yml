@@ -22,7 +22,7 @@ jobs:
       dist: focal
 
 before_script:
-  - composer update --dev
+  - composer -vvv update --dev
 
 script:
   - ./vendor/bin/phpunit && echo "EVERYTHING IS FINE"
