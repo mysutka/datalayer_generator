@@ -21,7 +21,7 @@ jobs:
     - php: 8.1
       dist: focal
 
-before_install:
+before_script:
   - composer update --dev
 
 script:
