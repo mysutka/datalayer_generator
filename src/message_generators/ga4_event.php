@@ -18,9 +18,11 @@ class GA4Event extends ActionBase {
 		$options += [
 			"event_name" => null,
 			"quantity" => 1,
+			"items" => [],
 		];
 		$this->object = $object;
 		$this->options = $options;
+		$this->items = $options["items"];
 	}
 
 	function getObject() {
@@ -54,8 +56,7 @@ class GA4Event extends ActionBase {
 		return $basket->getCurrency();
 	}
 
-	protected function _getCategoryNames() {
-		$object = $this->getObject();
+	protected function _getCategoryNames($object) {
 		if ($object instanceof \Product) {
 			$object = $object->getCard();
 		}
@@ -71,9 +72,9 @@ class GA4Event extends ActionBase {
 		return array_values($_items);
 	}
 
-	function getCommonAttributes($product) {
+	function getCommonProductAttributes($product) {
 
-		$categories = $this->_getCategoryNames();
+		$categories = $this->_getCategoryNames($product);
 		$card = $product->getCard();
 		$brand = $card->getBrand();
 		$_i = [
@@ -93,8 +94,7 @@ class GA4Event extends ActionBase {
 			"item_list_name" => "",
 			"item_variant" => "",
 			"location_id" => "",
-			"price" => $this->_getUnitPrice($product),
-			"quantity" => $this->options["amount"],
+			"quantity" => $this->options["quantity"],
 		];
 		return $_i;
 	}

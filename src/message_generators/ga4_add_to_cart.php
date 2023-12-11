@@ -18,13 +18,16 @@ class GA4AddToCart extends GA4Event {
 		];
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		$product = $this->getObject();
+		$product = $this->items ? $this->items[0] : null;
 		if (is_null($product)) {
 			return null;
 		}
-		$card = $product->getCard();
-		$_i = $this->getCommonAttributes($product);
-		$out["items"][] = array_filter($_i);
+		foreach($this->items as $idx => $i) {
+			$_item = $this->getCommonProductAttributes($product);
+			$_item["index"] = $idx;
+			$_item["price"] = $this->_getUnitPrice($product);
+			$out["items"][] = array_filter($_item);
+		}
 		return array_filter($out);
 	}
 

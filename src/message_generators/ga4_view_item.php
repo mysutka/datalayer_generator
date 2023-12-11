@@ -19,14 +19,13 @@ class GA4ViewItem extends GA4Event {
 		];
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		$card = $this->getObject();
-		$product = $card->getFirstProduct();
-		if (is_null($product)) {
-			return null;
+		foreach($this->items as $idx => $i) {
+			$_item = $this->getCommonProductAttributes($i);
+			$_item["index"] = $idx;
+			$_item["quantity"] = 1;
+			$_item["price"] = $this->_getUnitPrice($i);
+			$out["items"][] = array_filter($_item);
 		}
-		$brand = $card->getBrand();
-		$_i = $this->getCommonAttributes($product);
-		$out["items"][] = array_filter($_i);
 		return array_filter($out);
 	}
 
