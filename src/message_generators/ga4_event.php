@@ -98,5 +98,9 @@ class GA4Event extends ActionBase {
 		];
 		return $_i;
 	}
+
+	protected function _arrayFilter($value) {
+		return (!is_null($value) && ($value!==false) && ($value!==""));
+	}
 }
 

@@ -37,7 +37,7 @@ class GA4Purchase extends GA4Event {
 			$_item["index"] = $idx;
 			$_item["price"] = $i->getUnitPriceInclVat();
 			$_item["quantity"] = $i->getAmount();
-			$out["items"][] = array_filter($_item);
+			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4Event", "_arrayFilter"]);
 		}
 
 		return array_filter($out);

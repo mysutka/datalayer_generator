@@ -26,7 +26,7 @@ class GA4AddToCart extends GA4Event {
 			$_item = $this->getCommonProductAttributes($product);
 			$_item["index"] = $idx;
 			$_item["price"] = $this->_getUnitPrice($product);
-			$out["items"][] = array_filter($_item);
+			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4Event", "_arrayFilter"]);
 		}
 		return array_filter($out);
 	}

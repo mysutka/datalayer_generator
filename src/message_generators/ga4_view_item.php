@@ -24,7 +24,7 @@ class GA4ViewItem extends GA4Event {
 			$_item["index"] = $idx;
 			$_item["quantity"] = 1;
 			$_item["price"] = $this->_getUnitPrice($i);
-			$out["items"][] = array_filter($_item);
+			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4Event", "_arrayFilter"]);
 		}
 		return array_filter($out);
 	}
