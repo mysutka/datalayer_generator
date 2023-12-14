@@ -22,7 +22,7 @@ class GA4AddPaymentInfo extends GA4Event {
 		if (is_null($_payment_method)) {
 			return null;
 		}
-		$out["value"] = $_payment_method->getPriceInclVat();
+#		$out["value"] = $_payment_method->getPriceInclVat();
 		$out["payment_type"] = $_payment_method->getLabel();
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();

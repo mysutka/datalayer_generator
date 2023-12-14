@@ -1,11 +1,11 @@
 <?php
 namespace DatalayerGenerator\MessageGenerators;
 
-class GA4AddShippingInfo extends GA4Event {
+class GA4BeginCheckout extends GA4Event {
 
 	public function __construct($object, $options=[]) {
 		$options += [
-			"event_name" => "add_shipping_info",
+			"event_name" => "begin_checkout",
 		];
 		parent::__construct($object, $options);
 	}
@@ -15,15 +15,9 @@ class GA4AddShippingInfo extends GA4Event {
 			"currency" => null,
 			"value" => null,
 			"coupon" => null,
-			"shipping_tier" => null,
 			"items" => [],
 		];
-		$_delivery_method = $this->getObject()->getDeliveryMethod();
-		if (is_null($_delivery_method)) {
-			return null;
-		}
-#		$out["value"] = $_delivery_method->getPriceInclVat();
-		$out["shipping_tier"] = $_delivery_method->getLabel();
+#		$out["value"] = $this->getObject()->getItemsPriceInclVat();
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
 		foreach($this->items as $idx => $bi) {
