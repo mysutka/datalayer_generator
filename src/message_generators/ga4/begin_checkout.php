@@ -1,11 +1,11 @@
 <?php
-namespace DatalayerGenerator\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators\GA4;
 
-class GA4ViewCart extends GA4Event {
+class BeginCheckout extends EventBase {
 
 	public function __construct($object, $options=[]) {
 		$options += [
-			"event_name" => "view_cart",
+			"event_name" => "begin_checkout",
 		];
 		parent::__construct($object, $options);
 	}
@@ -14,6 +14,7 @@ class GA4ViewCart extends GA4Event {
 		$out = [
 			"currency" => null,
 			"value" => null,
+			"coupon" => null,
 			"items" => [],
 		];
 #		$out["value"] = $this->getObject()->getItemsPriceInclVat();
@@ -25,7 +26,7 @@ class GA4ViewCart extends GA4Event {
 			$_item["index"] = $idx;
 			$_item["quantity"] = 1;
 			$_item["price"] = $bi->getUnitPriceInclVat();
-			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4Event", "_arrayFilter"]);
+			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		}
 		return array_filter($out);
 	}

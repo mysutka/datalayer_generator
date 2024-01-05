@@ -1,7 +1,7 @@
 <?php
-namespace DatalayerGenerator\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators\GA4;
 
-class GA4AddPaymentInfo extends GA4Event {
+class AddPaymentInfo extends EventBase {
 
 	public function __construct($object, $options=[]) {
 		$options += [
@@ -32,7 +32,7 @@ class GA4AddPaymentInfo extends GA4Event {
 			$_item["index"] = $idx;
 			$_item["quantity"] = 1;
 			$_item["price"] = $bi->getUnitPriceInclVat();
-			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4Event", "_arrayFilter"]);
+			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		}
 		return array_filter($out);
 	}

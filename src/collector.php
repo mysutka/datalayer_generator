@@ -30,6 +30,11 @@ class Collector {
 
 	var $ecommerce_measurements = [];
 
+	/**
+	 * Just for GA4 purposes.
+	 */
+	var $itemizer = null;
+
 	private function __construct() { }
 	private function __clone() { }
 	public function __wakeup() { }
@@ -63,6 +68,10 @@ class Collector {
 		EcDatatype::SetPromotionClassName($options["promotion_class_name"]);
 
 		return self::$Instance;
+	}
+
+	function setItemizer($itemizer) {
+		$this->itemizer = $itemizer;
 	}
 
 	/**

@@ -1,12 +1,11 @@
 <?php
-namespace DatalayerGenerator\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators\GA4;
 
-class GA4ViewItem extends GA4Event {
+class AddToCart extends EventBase {
 
 	public function __construct($object, $options=[]) {
 		$options += [
-			"event_name" => "view_item",
-			"quantity" => 1,
+			"event_name" => "add_to_cart",
 		];
 		parent::__construct($object, $options);
 	}
@@ -19,12 +18,15 @@ class GA4ViewItem extends GA4Event {
 		];
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
+		$product = $this->items ? $this->items[0] : null;
+		if (is_null($product)) {
+			return null;
+		}
 		foreach($this->items as $idx => $i) {
-			$_item = $this->getCommonProductAttributes($i);
+			$_item = $this->getCommonProductAttributes($product);
 			$_item["index"] = $idx;
-			$_item["quantity"] = 1;
-			$_item["price"] = $this->_getUnitPrice($i);
-			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4Event", "_arrayFilter"]);
+			$_item["price"] = $this->_getUnitPrice($product);
+			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		}
 		return array_filter($out);
 	}

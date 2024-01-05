@@ -3,12 +3,16 @@
  * Base class for generators
  * For enhanced ecommerce.
  */
-namespace DatalayerGenerator\MessageGenerators;
+namespace DatalayerGenerator\MessageGenerators\GA4;
+use DatalayerGenerator\MessageGenerators\ActionBase;
 
 /**
  * @todo extend another class as it contains methods useless for GA4.
  */
-class GA4Event extends ActionBase {
+class EventBase extends ActionBase {
+
+	protected $itemizer;
+
 	/**
 	 * @param array $options
 	 * - event_name - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
@@ -20,6 +24,11 @@ class GA4Event extends ActionBase {
 			"quantity" => 1,
 			"items" => [],
 		];
+		// Not yet in Collector class as it remains platform independent.
+		$collector = \DatalayerGenerator\Collector::GetInstance();
+		if (!isset($collector->itemizer)) {
+			$collector->itemizer = new Itemizer;
+		}
 		$this->object = $object;
 		$this->options = $options;
 		$this->items = $options["items"];
@@ -52,53 +61,25 @@ class GA4Event extends ActionBase {
 
 	function getCurrentCurrency() {
 		$collector = \DatalayerGenerator\Collector::GetInstance();
+		if (!isset($collector->controller)) {
+			return null;
+		}
 		$basket = $collector->controller->_get_basket();
 		return $basket->getCurrency();
 	}
 
-	protected function _getCategoryNames($object) {
-		if ($object instanceof \Product) {
-			$object = $object->getCard();
-		}
-		$cat = $object->getCategories(array("consider_invisible_categories" => false, "consider_filters" => false, "deduplicate" => true));
-		$cat = array_shift($cat);
-		if (is_null($cat)) {
-			return [];
-		}
-		$_items = \Category::GetInstancesOnPath($cat->getPath());
-		$_items = array_map(function($i) {
-			return $i->getName();
-		}, $_items);
-		return array_values($_items);
-	}
-
 	function getCommonProductAttributes($product) {
-
-		$categories = $this->_getCategoryNames($product);
-		$card = $product->getCard();
-		$brand = $card->getBrand();
-		$_i = [
-			"item_id" => $product->getCatalogId(),
-			"item_name" => $product->getName(),
-			"affiliation" => \SystemParameter::ContentOn("app.name.short"),
-			"coupon" => "",
-			"discount" => "",
-			"index" => 0,
-			"item_brand" => (string)$brand,
-			"item_category" => $categories[0],
-			"item_category2" => $categories[1],
-			"item_category3" => $categories[2],
-			"item_category4" => $categories[3],
-			"item_category5" => $categories[4],
-			"item_list_id" => "",
-			"item_list_name" => "",
-			"item_variant" => "",
-			"location_id" => "",
-			"quantity" => $this->options["quantity"],
-		];
-		return $_i;
+		return $this->getItemizer()->getCommonProductAttributes($product);
 	}
 
+	function getItemizer() {
+		$collector = \DatalayerGenerator\Collector::GetInstance();
+		return $collector->itemizer;
+	}
+
+	/**
+	 * Our own array_filter alternative which leaves keys containing '0'.
+	 */
 	protected function _arrayFilter($value) {
 		return (!is_null($value) && ($value!==false) && ($value!==""));
 	}
