@@ -198,6 +198,12 @@ class BasicGA4Test extends TestBaseGA4 {
 
 class DummyItemizer {
 	function getCommonProductAttributes($product) {
+		$categories = [
+			"Catalog",
+			"Books",
+			"Human sciences",
+			"History",
+		];
 		return [
 			"item_id" => "catalog_id",
 			"item_name" => "dummy name",
@@ -210,7 +216,7 @@ class DummyItemizer {
 			"item_category2" => $categories[1],
 			"item_category3" => $categories[2],
 			"item_category4" => $categories[3],
-			"item_category5" => $categories[4],
+			"item_category5" => null,
 			"item_list_id" => "",
 			"item_list_name" => "",
 			"item_variant" => "",
