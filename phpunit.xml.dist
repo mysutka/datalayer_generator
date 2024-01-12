@@ -5,6 +5,7 @@
          stopOnFailure="false"
          bootstrap="load.php"
          cacheDirectory="cache"
+         displayDetailsOnTestsThatTriggerWarnings="true"
 >
 <testsuites>
 	<testsuite name="all">

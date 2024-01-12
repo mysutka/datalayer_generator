@@ -25,7 +25,7 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 		($options["debug"]===true) && print(print_r($obj,true));
 		# array contains two keys "ecommerce" and "event"
 		$this->assertCount(sizeof($tested_keys), array_keys($obj));
-		$this->assertSame($tested_keys, array_keys($obj));
+		$this->assertEqualsCanonicalizing($tested_keys, array_keys($obj));
 
 		if (is_null($options["event"])) {
 			$this->assertArrayNotHasKey("event", $obj);

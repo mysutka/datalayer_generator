@@ -3,11 +3,11 @@ namespace DatalayerGenerator\MessageGenerators\GA4;
 
 class AddToCart extends EventBase {
 
-	public function __construct($object, $options=[]) {
-		$options += [
+	public function __construct($object, $event_params=[], $options=[]) {
+		$event_params += [
 			"event_name" => "add_to_cart",
 		];
-		parent::__construct($object, $options);
+		parent::__construct($object, $event_params, $options);
 	}
 
 	public function getEcommerceData() {
@@ -23,9 +23,8 @@ class AddToCart extends EventBase {
 			return null;
 		}
 		foreach($this->items as $idx => $i) {
-			$_item = $this->getCommonProductAttributes($product);
+			$_item = $this->_itemToArray($i);
 			$_item["index"] = $idx;
-			$_item["price"] = $this->_getUnitPrice($product);
 			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		}
 		return array_filter($out);
@@ -37,6 +36,10 @@ class AddToCart extends EventBase {
 			return null;
 		}
 		return $price->getUnitPriceInclVat();
+	}
+
+	protected function _getAmount($product) {
+		return $this->options["quantity"];
 	}
 }
 

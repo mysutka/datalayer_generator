@@ -1,7 +1,7 @@
 <?php
-namespace DatalayerGenerator\MessageGenerators\GA4;
+namespace DatalayerGenerator\MessageGenerators\GA4\ItemConverter;
 
-class Itemizer {
+class ProductConverter extends ItemConverter {
 
 	function getCategoryNames($object) {
 		if ($object instanceof \Product) {
@@ -40,12 +40,7 @@ class Itemizer {
 			"item_list_name" => "",
 			"item_variant" => "",
 			"location_id" => "",
-			"quantity" => $this->options["quantity"],
 		];
 		return $_i;
-	}
-
-	function getUnitPrice($product, EventBase $event) {
-		return $event->_getUnitPrice($product);
 	}
 }

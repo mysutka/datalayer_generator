@@ -4,6 +4,7 @@
  * For enhanced ecommerce.
  */
 namespace DatalayerGenerator\MessageGenerators\GA4;
+use DatalayerGenerator\MessageGenerators\GA4\ItemConverter\ProductConverter;
 use DatalayerGenerator\MessageGenerators\ActionBase;
 
 /**
@@ -11,27 +12,35 @@ use DatalayerGenerator\MessageGenerators\ActionBase;
  */
 class EventBase extends ActionBase {
 
-	protected $itemizer;
+	/**
+	 * 
+	 */
+	protected $item_converter = null;
 
 	/**
-	 * @param array $options
+	 * @param array $event_params
 	 * - event_name - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
 	 */
-	function __construct($object, $options=[]) {
+	function __construct($object, $event_params=[], $options=[]) {
 
 		$options += [
+			"item_converter" => null,
+		];
+
+		$event_params += [
 			"event_name" => null,
 			"quantity" => 1,
 			"items" => [],
 		];
-		// Not yet in Collector class as it remains platform independent.
-		$collector = \DatalayerGenerator\Collector::GetInstance();
-		if (!isset($collector->itemizer)) {
-			$collector->itemizer = new Itemizer;
+
+		if (!isset($options["item_converter"])) {
+			$options["item_converter"] = new ProductConverter(["price_finder" => $this->options["price_finder"]]);
 		}
 		$this->object = $object;
+		$this->item_converter = $options["item_converter"];
+		$this->event_params = $event_params;
 		$this->options = $options;
-		$this->items = $options["items"];
+		$this->items = $event_params["items"];
 	}
 
 	function getObject() {
@@ -39,7 +48,7 @@ class EventBase extends ActionBase {
 	}
 
 	function getEventName() {
-		return $this->options["event_name"];
+		return $this->event_params["event_name"];
 	}
 
 	function getDataLayerMessage() {
@@ -68,13 +77,21 @@ class EventBase extends ActionBase {
 		return $basket->getCurrency();
 	}
 
-	function getCommonProductAttributes($product) {
-		return $this->getItemizer()->getCommonProductAttributes($product);
+	function getCommonProductAttributes(\Product $product) {
+		return $this->getItemConverter()->getCommonProductAttributes($product);
 	}
 
-	function getItemizer() {
-		$collector = \DatalayerGenerator\Collector::GetInstance();
-		return $collector->itemizer;
+	function getItemConverter() {
+		return $this->item_converter;
+	}
+
+	function setItemConverter($item_converter) {
+		$this->item_converter = $item_converter;
+	}
+
+	protected function _itemToArray(\BasketItem|\Product|\OrderItem $item) {
+		$out = $this->getItemConverter()->toArray($item, $this);
+		return $out;
 	}
 
 	/**

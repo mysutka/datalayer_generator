@@ -1,13 +1,17 @@
 <?php
 namespace DatalayerGenerator\MessageGenerators\GA4;
+use DatalayerGenerator\MessageGenerators\GA4\ItemConverter\OrderItemConverter;
 
 class Purchase extends EventBase {
 
-	public function __construct($object, $options=[]) {
-		$options += [
+	public function __construct($object, $event_params=[], $options=[]) {
+		$event_params += [
 			"event_name" => "purchase",
 		];
-		parent::__construct($object, $options);
+		$options += [
+			"item_converter" => new OrderItemConverter(),
+		];
+		parent::__construct($object, $event_params, $options);
 	}
 
 	public function getEcommerceData() {
@@ -27,28 +31,34 @@ class Purchase extends EventBase {
 		$price_vat = $this->_getPriceToPay(true);
 		$tax = $price_vat - $price;
 
-		$out["currency"] = (string)$this->getCurrentCurrency();
+		$currency_decimals_summary = 2;
+		if ($currency) {
+			$currency_decimals_summary = $currency->getDecimalsSummary();
+		}
+		$out["currency"] = (string)$currency;
 		$out["transaction_id"] = $this->getObject()->getOrderNo();
-		$out["value"] = round($price_vat, $currency->getDecimalsSummary());
-		$out["tax"] = round($tax, $currency->getDecimalsSummary());
-		$out["shipping"] = $this->_getShipping();
+		$out["value"] = round($price_vat, $currency_decimals_summary);
+		$out["tax"] = round($tax, $currency_decimals_summary);
+		$out["shipping"] = round($this->_getShipping(), $currency_decimals_summary);
 		foreach($this->items as $idx => $i) {
-			$_item = $this->getCommonProductAttributes($i->getProduct());
+			$_item = $this->_itemToArray($i);
 			$_item["index"] = $idx;
-			$_item["price"] = $i->getUnitPriceInclVat();
-			$_item["quantity"] = $i->getAmount();
 			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		}
 
 		return array_filter($out);
 	}
 
-	protected function _getUnitPrice($order_item) {
-		return null;
+	function _getUnitPrice($order_item) {
+		return $order_item->getUnitPriceInclVat();
+	}
+
+	protected function _getAmount($order_item) {
+		return $order_item->getAmount();
 	}
 
 	protected function _getShipping() {
-		$shipping = $this->getObject()->getDeliveryMethod()->getPriceInclVat();
+		$shipping = $this->getObject()->getDeliveryFeeInclVat();
 		return $shipping;
 	}
 
@@ -61,8 +71,8 @@ class Purchase extends EventBase {
 	private function _getPriceToPay($incl_vat=true) {
 		$order = $this->getObject();
 		$_price = $order->getItemsPrice($incl_vat);
-		$_price -= $order->getVouchersDiscountAmount($incl_vat);
-		$_price -= $order->getCampaignsDiscountAmount($incl_vat);
+		$_price += $order->getVouchersDiscountAmount($incl_vat);
+		$_price += $order->getCampaignsDiscountAmount($incl_vat);
 		return $_price;
 }
 

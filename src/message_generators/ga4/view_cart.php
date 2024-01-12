@@ -3,11 +3,11 @@ namespace DatalayerGenerator\MessageGenerators\GA4;
 
 class ViewCart extends EventBase {
 
-	public function __construct($object, $options=[]) {
-		$options += [
+	public function __construct($object, $event_params=[], $options=[]) {
+		$event_params += [
 			"event_name" => "view_cart",
 		];
-		parent::__construct($object, $options);
+		parent::__construct($object, $event_params, $options);
 	}
 
 	public function getEcommerceData() {
@@ -28,11 +28,12 @@ class ViewCart extends EventBase {
 		return array_filter($out);
 	}
 
-	protected function _itemToArray($item) {
-		$out = $this->getCommonProductAttributes($item);
-		$out["quantity"] = $item->getAmount();
-		$out["price"] = $item->getUnitPriceInclVat();
-		return $out;
+	protected function _getUnitPrice($basket_item) {
+		return $basket_item->getUnitPriceInclVat();
+	}
+
+	protected function _getAmount($basket_item) {
+		return $basket_item->getAmount();
 	}
 }
 

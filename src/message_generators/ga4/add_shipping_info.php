@@ -3,11 +3,12 @@ namespace DatalayerGenerator\MessageGenerators\GA4;
 
 class AddShippingInfo extends EventBase {
 
-	public function __construct($object, $options=[]) {
-		$options += [
+	public function __construct($object, $event_params=[], $options=[]) {
+		$event_params += [
 			"event_name" => "add_shipping_info",
 		];
-		parent::__construct($object, $options);
+		$options["item_converter"] = new BasketItemConverter();
+		parent::__construct($object, $event_params, $options);
 	}
 
 	public function getEcommerceData() {
@@ -26,15 +27,20 @@ class AddShippingInfo extends EventBase {
 		$out["shipping_tier"] = $_delivery_method->getLabel();
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		foreach($this->items as $idx => $bi) {
-			$i = $bi->getProduct();
-			$_item = $this->getCommonProductAttributes($i);
+		foreach($this->items as $idx => $item) {
+			$_item = $this->_itemToArray($item);
 			$_item["index"] = $idx;
-			$_item["quantity"] = 1;
-			$_item["price"] = $bi->getUnitPriceInclVat();
 			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		}
 		return array_filter($out);
+	}
+
+	protected function _getUnitPrice($basket_item) {
+		return $basket_item->getUnitPriceInclVat();
+	}
+
+	protected function _getAmount($basket_item) {
+		return $basket_item->getAmount();
 	}
 }
 

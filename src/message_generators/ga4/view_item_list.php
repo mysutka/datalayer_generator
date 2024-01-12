@@ -3,11 +3,11 @@ namespace DatalayerGenerator\MessageGenerators\GA4;
 
 class ViewItemList extends EventBase {
 
-	public function __construct($object, $options=[]) {
-		$options += [
+	public function __construct($object, $event_params=[], $options=[]) {
+		$event_params += [
 			"event_name" => "view_item_list",
 		];
-		parent::__construct($object, $options);
+		parent::__construct($object, $event_params, $options);
 	}
 
 	public function getEcommerceData() {
@@ -18,11 +18,9 @@ class ViewItemList extends EventBase {
 		];
 
 		foreach($this->items as $idx => $c) {
-			foreach($c->getProducts() as $i) {
-				$_item = $this->getCommonProductAttributes($i);
+			foreach($c->getProducts() as $item) {
+				$_item = $this->_itemToArray($i);
 				$_item["index"] = $idx;
-				$_item["price"] = $this->_getUnitPrice($i);
-				$_item["quantity"] = 1;
 				$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 			}
 		}
@@ -36,6 +34,10 @@ class ViewItemList extends EventBase {
 			return null;
 		}
 		return $price->getUnitPriceInclVat();
+	}
+
+	protected function _getAmount($product) {
+		return 1;
 	}
 }
 
