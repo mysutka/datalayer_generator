@@ -23,7 +23,7 @@ class ViewItem extends EventBase {
 		return $out;
 	}
 
-	protected function _getUnitPrice($product) {
+	function _getUnitPrice($product) {
 		$price_finder = $this->options["price_finder"];
 		if (is_null($price = $price_finder->getPrice($product))) {
 			return null;
@@ -31,7 +31,7 @@ class ViewItem extends EventBase {
 		return $price->getUnitPriceInclVat();
 	}
 
-	protected function _getAmount($product) {
+	function getAmount($product) {
 		return 1;
 	}
 }

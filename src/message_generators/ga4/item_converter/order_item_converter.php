@@ -9,7 +9,7 @@ class OrderItemConverter extends ItemConverter {
 	}
 
 	function getAmount($item, EventBase $event) {
-		return $item->getAmount();
+		return $event->getAmount($item);
 	}
 
 	function toArray($item, $event) {

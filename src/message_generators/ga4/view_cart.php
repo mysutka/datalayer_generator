@@ -1,11 +1,15 @@
 <?php
 namespace DatalayerGenerator\MessageGenerators\GA4;
+use DatalayerGenerator\MessageGenerators\GA4\ItemConverter\BasketItemConverter;
 
 class ViewCart extends EventBase {
 
 	public function __construct($object, $event_params=[], $options=[]) {
 		$event_params += [
 			"event_name" => "view_cart",
+		];
+		$options += [
+			"item_converter" => new BasketItemConverter,
 		];
 		parent::__construct($object, $event_params, $options);
 	}
@@ -23,11 +27,11 @@ class ViewCart extends EventBase {
 		return $out;
 	}
 
-	protected function _getUnitPrice($basket_item) {
+	function _getUnitPrice($basket_item) {
 		return $basket_item->getUnitPriceInclVat();
 	}
 
-	protected function _getAmount($basket_item) {
+	function getAmount($basket_item) {
 		return $basket_item->getAmount();
 	}
 }

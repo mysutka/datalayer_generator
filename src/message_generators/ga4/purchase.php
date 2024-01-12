@@ -48,7 +48,7 @@ class Purchase extends EventBase {
 		return $order_item->getUnitPriceInclVat();
 	}
 
-	protected function _getAmount($order_item) {
+	function getAmount($order_item) {
 		return $order_item->getAmount();
 	}
 

@@ -17,6 +17,10 @@ class EventBase extends ActionBase {
 	 */
 	protected $item_converter = null;
 
+	protected $options = [];
+
+	protected $event_params = [];
+
 	/**
 	 * @param array $event_params
 	 * - event_name - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
@@ -34,7 +38,7 @@ class EventBase extends ActionBase {
 		];
 
 		if (!isset($options["item_converter"])) {
-			$options["item_converter"] = new ProductConverter(["price_finder" => $this->options["price_finder"]]);
+			$options["item_converter"] = new ProductConverter(["price_finder" => $options["price_finder"]]);
 		}
 		$this->object = $object;
 		$this->item_converter = $options["item_converter"];

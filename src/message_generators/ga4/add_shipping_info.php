@@ -1,5 +1,6 @@
 <?php
 namespace DatalayerGenerator\MessageGenerators\GA4;
+use DatalayerGenerator\MessageGenerators\GA4\ItemConverter\BasketItemConverter;
 
 class AddShippingInfo extends EventBase {
 
@@ -31,11 +32,11 @@ class AddShippingInfo extends EventBase {
 		return $out;
 	}
 
-	protected function _getUnitPrice($basket_item) {
+	function _getUnitPrice($basket_item) {
 		return $basket_item->getUnitPriceInclVat();
 	}
 
-	protected function _getAmount($basket_item) {
+	function getAmount($basket_item) {
 		return $basket_item->getAmount();
 	}
 }

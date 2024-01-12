@@ -28,11 +28,11 @@ class BeginCheckout extends EventBase {
 		return $out;
 	}
 
-	protected function _getUnitPrice($basket_item) {
+	function _getUnitPrice($basket_item) {
 		return $basket_item->getUnitPriceInclVat();
 	}
 
-	protected function _getAmount($basket_item) {
+	function getAmount($basket_item) {
 		return $basket_item->getAmount();
 	}
 }
