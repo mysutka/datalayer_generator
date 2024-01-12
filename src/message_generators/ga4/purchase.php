@@ -40,13 +40,8 @@ class Purchase extends EventBase {
 		$out["value"] = round($price_vat, $currency_decimals_summary);
 		$out["tax"] = round($tax, $currency_decimals_summary);
 		$out["shipping"] = round($this->_getShipping(), $currency_decimals_summary);
-		foreach($this->items as $idx => $i) {
-			$_item = $this->_itemToArray($i);
-			$_item["index"] = $idx;
-			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
-		}
-
-		return array_filter($out);
+		$out["items"] = $this->itemsToArray();
+		return $out;
 	}
 
 	function _getUnitPrice($order_item) {

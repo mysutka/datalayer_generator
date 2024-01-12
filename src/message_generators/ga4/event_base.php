@@ -89,6 +89,16 @@ class EventBase extends ActionBase {
 		$this->item_converter = $item_converter;
 	}
 
+	protected function itemsToArray() {
+		$out = [];
+		foreach($this->items as $idx => $i) {
+			$_item = $this->_itemToArray($i);
+			$_item["index"] = $idx;
+			$out[] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
+		}
+		return array_filter($out);
+	}
+
 	protected function _itemToArray(\BasketItem|\Product|\OrderItem $item) {
 		$out = $this->getItemConverter()->toArray($item, $this);
 		return $out;

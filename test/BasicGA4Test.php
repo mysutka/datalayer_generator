@@ -234,6 +234,7 @@ class BasicGA4Test extends TestBaseGA4 {
 
 class DummyConverter {
 	function getCommonProductAttributes($product) {
+#		error_log(print_r($product, true));
 		$categories = [
 			"Catalog",
 			"Books",
@@ -272,8 +273,8 @@ class DummyConverter {
 		return 2;
 	}
 
-	function toArray($item) {
-		return $this->getCommonProductAttributes($item);
+	function toArray($item, $event) {
+		return $this->getCommonProductAttributes($item, $event);
 	}
 }
 
@@ -284,14 +285,22 @@ class DummyBasketItemConverter extends DummyConverter {
 		return 3;
 	}
 
-	function toArray($item) {
-		$out = parent::toArray($item);
-		$out["quantity"] = $this->getAmount($item);
+	function toArray($item, $event) {
+		$out = parent::toArray($item->getProduct(), $event);
+		$out["quantity"] = $this->getAmount($item, $event);
+		$out["price"] = $this->getUnitPrice($item, $event);
 		return $out;
 	}
 }
 
 class DummyOrderItemConverter extends DummyConverter {
+
+	function toArray($item, $event) {
+		$out = parent::toArray($item->getProduct(), $event);
+		$out["quantity"] = $this->getAmount($item, $event);
+		$out["price"] = $this->getUnitPrice($item, $event);
+		return $out;
+	}
 }
 
 class DummyOrder {

@@ -12,7 +12,7 @@ class OrderItemConverter extends ItemConverter {
 		return $item->getAmount();
 	}
 
-	function toArray($item, EventBase $event) {
+	function toArray($item, $event) {
 		$out = $this->getCommonProductAttributes($item->getProduct());
 		$out["quantity"] = $this->getAmount($item, $event);
 		$out["price"] = $this->getUnitPrice($item, $event);

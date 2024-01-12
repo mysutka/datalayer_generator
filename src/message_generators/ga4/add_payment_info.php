@@ -27,12 +27,8 @@ class AddPaymentInfo extends EventBase {
 		$out["payment_type"] = $_payment_method->getLabel();
 		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		foreach($this->items as $idx => $item) {
-			$_item = $this->_itemToArray($item);
-			$_item["index"] = $idx;
-			$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
-		}
-		return array_filter($out);
+		$out["items"] = $this->itemsToArray();
+		return $out;
 	}
 
 	protected function _getUnitPrice($basket_item) {
