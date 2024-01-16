@@ -13,12 +13,12 @@ class AddPaymentInfo extends EventBase {
 	}
 
 	public function getEcommerceData() {
-		$out = [
+		$out = parent::getEcommerceData();
+		$out += [
 			"currency" => null,
 			"value" => null,
 			"coupon" => null,
 			"payment_type" => null,
-			"items" => [],
 		];
 		$_payment_method = $this->getObject()->getPaymentMethod();
 		if (is_null($_payment_method)) {
@@ -26,9 +26,7 @@ class AddPaymentInfo extends EventBase {
 		}
 #		$out["value"] = $_payment_method->getPriceInclVat();
 		$out["payment_type"] = $_payment_method->getLabel();
-		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		$out["items"] = $this->itemsToArray();
 		return $out;
 	}
 

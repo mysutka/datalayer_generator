@@ -93,6 +93,13 @@ class EventBase extends ActionBase {
 		$this->item_converter = $item_converter;
 	}
 
+	function getEcommerceData() {
+		$out = [
+			"items" => $this->itemsToArray(),
+		];
+		return $out;
+	}
+
 	protected function itemsToArray() {
 		$out = [];
 		foreach($this->items as $idx => $i) {
@@ -103,7 +110,7 @@ class EventBase extends ActionBase {
 		return array_filter($out);
 	}
 
-	protected function _itemToArray(\BasketItem|\Product|\OrderItem $item) {
+	protected function _itemToArray($item) {
 		$out = $this->getItemConverter()->toArray($item, $this);
 		return $out;
 	}

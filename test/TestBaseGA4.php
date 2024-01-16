@@ -33,6 +33,14 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 			$this->assertEquals($options["event"], $obj["event"]);
 		}
 		$this->assertArrayHasKey("items", $obj["ecommerce"]);
+
+		# test prvku pole
+		foreach($obj["ecommerce"]["items"] as $idx => $item) {
+			$this->assertEquals($idx, $item["index"]);
+			$this->assertIsArray($item);
+			$this->assertArrayHasKey("item_id", $item);
+			$this->assertArrayHasKey("item_name", $item);
+		}
 	}
 
 	function _test_basic_json($instance, $options=[]) {
@@ -55,5 +63,11 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 			$this->assertEquals($options["event"], $obj_json["event"]);
 		}
 		$this->assertArrayHasKey("items", $obj_json["ecommerce"]);
+		foreach($obj_json["ecommerce"]["items"] as $idx => $item) {
+			$this->assertEquals($idx, $item["index"]);
+			$this->assertIsArray($item);
+			$this->assertArrayHasKey("item_id", $item);
+			$this->assertArrayHasKey("item_name", $item);
+		}
 	}
 }

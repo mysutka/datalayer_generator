@@ -11,18 +11,16 @@ class AddToCart extends EventBase {
 	}
 
 	public function getEcommerceData() {
-		$out = [
+		$out = parent::getEcommerceData();
+		$out += [
 			"currency" => null,
 			"value" => "",
-			"items" => [],
 		];
-		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
 		$product = $this->items ? $this->items[0] : null;
 		if (is_null($product)) {
 			return null;
 		}
-		$out["items"] = $this->itemsToArray();
 		return $out;
 	}
 

@@ -13,7 +13,8 @@ class AddShippingInfo extends EventBase {
 	}
 
 	public function getEcommerceData() {
-		$out = [
+		$out = parent::getEcommerceData();
+		$out += [
 			"currency" => null,
 			"value" => null,
 			"coupon" => null,
@@ -26,9 +27,7 @@ class AddShippingInfo extends EventBase {
 		}
 #		$out["value"] = $_delivery_method->getPriceInclVat();
 		$out["shipping_tier"] = $_delivery_method->getLabel();
-		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		$out["items"] = $this->itemsToArray();
 		return $out;
 	}
 

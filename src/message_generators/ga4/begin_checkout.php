@@ -15,16 +15,14 @@ class BeginCheckout extends EventBase {
 	}
 
 	public function getEcommerceData() {
-		$out = [
+		$out = parent::getEcommerceData();
+		$out += [
 			"currency" => null,
 			"value" => null,
 			"coupon" => null,
-			"items" => [],
 		];
 #		$out["value"] = $this->getObject()->getItemsPriceInclVat();
-		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		$out["items"] = $this->itemsToArray();
 		return $out;
 	}
 

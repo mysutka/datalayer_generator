@@ -12,14 +12,13 @@ class ViewItem extends EventBase {
 	}
 
 	public function getEcommerceData() {
-		$out = [
+		$out = parent::getEcommerceData();
+		$out += [
 			"currency" => null,
 			"value" => "",
 			"items" => [],
 		];
-		$_items = [];
 		$out["currency"] = (string)$this->getCurrentCurrency();
-		$out["items"] = $this->itemsToArray();
 		return $out;
 	}
 

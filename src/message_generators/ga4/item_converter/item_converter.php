@@ -58,7 +58,11 @@ class ItemConverter {
 	}
 
 	function toArray($item, $event) {
-		$out = $this->getCommonProductAttributes($item);
+		$product = $item;
+		if (!($item instanceof \Product) && method_exists($item, "getProduct")) {
+			$product = $item->getProduct();
+		}
+		$out = $this->getCommonProductAttributes($product);
 		$out["quantity"] = $this->getAmount($item, $event);
 		$out["price"] = $this->getUnitPrice($item, $event);
 		return $out;

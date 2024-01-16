@@ -15,16 +15,15 @@ class Purchase extends EventBase {
 	}
 
 	public function getEcommerceData() {
-		$out = [
+		$out = parent::getEcommerceData();
+		$out += [
 			"currency" => null,
 			"transaction_id" => null,
 			"value" => null,
 			"coupon" => null,
 			"shipping" => null,
 			"tax" => null,
-			"items" => [],
 		];
-		$_items = [];
 
 		$currency = $this->getCurrentCurrency();
 		$price = $this->_getPriceToPay(false);
@@ -40,7 +39,6 @@ class Purchase extends EventBase {
 		$out["value"] = round($price_vat, $currency_decimals_summary);
 		$out["tax"] = round($tax, $currency_decimals_summary);
 		$out["shipping"] = round($this->_getShipping(), $currency_decimals_summary);
-		$out["items"] = $this->itemsToArray();
 		return $out;
 	}
 
