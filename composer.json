@@ -12,10 +12,10 @@
 		}
 	],
 	"require": {
-		"php": ">=7.2.0"
+		"php": ">=7.1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": ">8",
+		"phpunit/phpunit": ">7",
 		"atk14/dictionary": "^1.0"
 	},
 	"autoload": {
