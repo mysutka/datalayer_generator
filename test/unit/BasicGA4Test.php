@@ -24,15 +24,10 @@ class BasicGA4Test extends TestBaseGA4 {
 		$instance->push(new DatalayerGenerator\MessageGenerators\GA4\ViewItem("a", ["items" => $products], ["item_converter" => new DummyConverter]));
 		$this->_test_basic($instance, ["event" => "view_item", "debug" => !true]);
 		$this->_test_basic_json($instance, ["event" => "view_item", "debug" => !true]);
+		$this->_assertJsonIsSameAsArray($instance);
 
 		$dl = $instance->getDataLayerMessages();
-		$dl_json = $instance->getDataLayerMessagesJson();
 		$obj = array_shift($dl);
-		$obj_json = array_shift($dl_json);
-
-		# message returned either as array or as json should contain same data
-		$this->assertEquals(sizeof($dl), sizeof($dl_json));
-		$this->assertSame($obj, json_decode($obj_json,true));
 
 		$product_data = $obj["ecommerce"]["items"][0];
 
@@ -72,15 +67,10 @@ class BasicGA4Test extends TestBaseGA4 {
 		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\Purchase($order, ["items" => $items], ["item_converter" => new DummyOrderItemConverter]));
 		$this->_test_basic($instance, ["event" => "purchase", "debug" => !true]);
 		$this->_test_basic_json($instance, ["event" => "purchase", "debug" => !true]);
+		$this->_assertJsonIsSameAsArray($instance);
 
 		$dl = $instance->getDataLayerMessages();
-		$dl_json = $instance->getDataLayerMessagesJson();
 		$obj = array_shift($dl);
-		$obj_json = array_shift($dl_json);
-
-		# message returned either as array or as json should contain same data
-		$this->assertEquals(sizeof($dl), sizeof($dl_json));
-		$this->assertEqualsCanonicalizing($obj, json_decode($obj_json,true));
 
 		$product_data = $obj["ecommerce"]["items"][0];
 
@@ -113,17 +103,10 @@ class BasicGA4Test extends TestBaseGA4 {
 		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\AddToCart($products[0], ["items" => $products], ["item_converter" => new DummyConverter]));
 		$this->_test_basic($instance, ["event" => "add_to_cart", "debug" => !true]);
 		$this->_test_basic_json($instance, ["event" => "add_to_cart", "debug" => !true]);
+		$this->_assertJsonIsSameAsArray($instance);
 
 		$dl = $instance->getDataLayerMessages();
-		$dl_json = $instance->getDataLayerMessagesJson();
 		$obj = array_shift($dl);
-		$obj_json = array_shift($dl_json);
-
-		# message returned either as array or as json should contain same data
-		$this->assertEquals(sizeof($dl), sizeof($dl_json));
-		$this->assertSame($obj, json_decode($obj_json,true));
-
-		$this->assertEqualsCanonicalizing($obj, json_decode($obj_json,true));
 
 		$product_data = $obj["ecommerce"]["items"][0];
 
@@ -148,17 +131,10 @@ class BasicGA4Test extends TestBaseGA4 {
 		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\BeginCheckout($basket, ["items" => $items], ["item_converter" => new DummyBasketItemConverter]));
 		$this->_test_basic($instance, ["event" => "begin_checkout", "debug" => !true]);
 		$this->_test_basic_json($instance, ["event" => "begin_checkout", "debug" => !true]);
+		$this->_assertJsonIsSameAsArray($instance);
 
 		$dl = $instance->getDataLayerMessages();
-		$dl_json = $instance->getDataLayerMessagesJson();
 		$obj = array_shift($dl);
-		$obj_json = array_shift($dl_json);
-
-		# message returned either as array or as json should contain same data
-		$this->assertEquals(sizeof($dl), sizeof($dl_json));
-		$this->assertSame($obj, json_decode($obj_json,true));
-
-		$this->assertEqualsCanonicalizing($obj, json_decode($obj_json,true));
 
 		$product_data = $obj["ecommerce"]["items"][0];
 
@@ -231,206 +207,4 @@ class BasicGA4Test extends TestBaseGA4 {
 	}
 }
 
-class DummyConverter extends DatalayerGenerator\MessageGenerators\GA4\ItemConverter\ItemConverter {
-	function getCommonProductAttributes($product) {
-
-		$categories = $this->getCategoryNames($product);
-		$card = $product->getCard();
-		$brand = $card->getBrand();
-		return [
-			"item_id" => $product->getCatalogId(),
-			"item_name" => $product->getName(),
-			"affiliation" => "Dummies e-shop",
-			"coupon" => "",
-			"discount" => "",
-			"index" => 0,
-			"item_brand" => (string)$brand,
-			"item_category" => $categories[0],
-			"item_category2" => $categories[1],
-			"item_category3" => $categories[2],
-			"item_category4" => $categories[3],
-			"item_category5" => null,
-			"item_list_id" => "",
-			"item_list_name" => "",
-			"item_variant" => "",
-			"location_id" => "",
-			"quantity" => 1,
-		];
-	}
-
-	function getCategoryNames($product) {
-		return [
-			"Catalog",
-			"Books",
-			"Human sciences",
-			"History",
-		];
-	}
-
-	function getUnitPrice($product, DatalayerGenerator\MessageGenerators\GA4\EventBase $event_base) {
-		return 123.45;
-	}
-
-	function getAmount($item, $event) {
-		return $event->getAmount($item);
-	}
-}
-
-class DummyBasketItemConverter extends DummyConverter { }
-
-class DummyOrderItemConverter extends DummyConverter { }
-
-class DummyOrder extends ElementBase {
-
-	function getOrderNo() {
-		return $this->values["order_no"];
-	}
-
-	function getDeliveryFeeInclVat() {
-		return (float)79.0;
-	}
-
-	function getItemsPrice($with_vat = true) {
-		$out = 9876.54;
-		if ($with_vat===false) {
-			$out = 9876.54/121*100;
-		}
-		return $out;
-	}
-
-	function getVouchersDiscountAmount() {
-		return 500;
-	}
-
-	function getCampaignsDiscountAmount() {
-		return 1000;
-	}
-}
-
-class DummyBasket {
-
-	function getDeliveryFeeInclVat() {
-		return (float)79.0;
-	}
-
-	function getItemsPrice($with_vat = true) {
-		$out = 9876.54;
-		if ($with_vat===false) {
-			$out = 9876.54/121*100;
-		}
-		return $out;
-	}
-
-	function getVouchersDiscountAmount() {
-		return 500;
-	}
-
-	function getCampaignsDiscountAmount() {
-		return 1000;
-	}
-}
-
-class ElementBase {
-	var $values = null;
-
-	function __construct($values=[]) {
-		$this->values = $values;
-	}
-}
-
-class Product extends ElementBase {
-
-	function __construct($values=[]) {
-		$values += [
-			"catalog_id" => "product-no-1",
-			"name" => "dummy name",
-			"card" => [
-				"brand" => [
-					"name" => "Brandy",
-				],
-			],
-		];
-		parent::__construct($values);
-	}
-
-	function getCatalogId() {
-		return $this->values["catalog_id"];
-	}
-	function getName() {
-		return $this->values["name"];
-	}
-	function getCard() {
-		return new Card($this->values["card"]);;
-	}
-}
-
-class Card extends ElementBase {
-	function __construct($values=[]) {
-		$values += [
-			"name" => "dummy Card name",
-		];
-		parent::__construct($values);
-	}
-
-	function getCategories() {
-		$categories = [
-			"Catalog",
-			"Books",
-			"Human sciences",
-			"History",
-		];
-		return $categories;
-	}
-
-	function getBrand() {
-		return new Brand($this->values["brand"]);;
-	}
-}
-
-class Brand extends ElementBase {
-
-	function getName() {
-		return $this->values["name"];
-	}
-
-	function __toString() {
-		return (string)$this->getName();
-	}
-}
-
-class OrderItem extends ElementBase {
-
-	function __construct($values=[]) {
-		$values += [
-			"amount" => 1,
-		];
-		parent::__construct($values);
-	}
-
-	function getProduct() {
-		return new Product($this->values["product"]);;
-	}
-
-	function getUnitPriceInclVat() {}
-	function getAmount() {
-		return $this->values["amount"];
-	}
-}
-
-class BasketItem extends ElementBase {
-
-	function __construct($values=[]) {
-		$values += [
-			"amount" => 1,
-		];
-		parent::__construct($values);
-	}
-
-	function getProduct() {
-		return new Product($this->values["product"]);
-	}
-	function getAmount() {
-		return $this->values["amount"];
-	}
-}
 

@@ -70,4 +70,15 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 			$this->assertArrayHasKey("item_name", $item);
 		}
 	}
+
+	function _assertJsonIsSameAsArray($instance) {
+		$dlayerArray = $instance->getDataLayerMessages();
+		$dlayerJson = $instance->getDataLayerMessagesJson();
+		$objArray = array_shift($dlayerArray);
+		$objJson = array_shift($dlayerJson);
+
+		# message returned either as array or as json should contain same data
+		$this->assertEquals(sizeof($dlayerArray), sizeof($dlayerJson));
+		$this->assertEqualsCanonicalizing($objArray, json_decode($objJson,true));
+	}
 }
