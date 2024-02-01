@@ -18,7 +18,6 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 		];
 		$tested_keys = array_filter($tested_keys);
 		$this->assertNotEmpty($dl = $instance->getDataLayerMessages());
-#		error_log(print_r($dl, true));
 		$this->assertCount($options["items_count"], $dl);
 		($options["debug"]===true) && print(print_r($dl,true));
 		$this->assertIsArray($obj = array_shift($dl));

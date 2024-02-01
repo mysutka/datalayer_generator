@@ -17,11 +17,13 @@ class ViewItemList extends EventBase {
 			"items" => [],
 		];
 
-		foreach($this->items as $idx => $c) {
+		$idx = 0;
+		foreach($this->items as $c) {
 			foreach($c->getProducts() as $item) {
 				$_item = $this->_itemToArray($item);
 				$_item["index"] = $idx;
 				$out["items"][] = array_filter($_item, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
+				$idx++;
 			}
 		}
 

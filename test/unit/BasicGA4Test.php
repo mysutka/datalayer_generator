@@ -147,30 +147,64 @@ class BasicGA4Test extends TestBaseGA4 {
 #		$this->assertEquals("CZK", $obj["ecommerce"]["coupon"]);
 	}
 
-	public function notest_datalayer_for_product_impressions() {
+	public function test_datalayer_for_view_item_list() {
 		$instance = \DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionsGenerator returns builtin product array
-		$products = ["a", "b", "c"];
-		$instance->measureEcommerceObject(new \DatalayerGenerator\MessageGenerators\Impressions($products));
-		$this->_test_basic($instance, ["event" => null]);
-		$this->_test_basic_json($instance, ["event" => null, "debug" => !true]);
+		$products = [
+			new Card([
+				"products" => [
+					[
+						"catalog_id" => "catalog_id_01",
+						"name" => "Neverending Story",
+					],
+					[
+						"catalog_id" => "catalog_id_02",
+						"name" => "Neverending Story, pt.II"
+					],
+					[
+						"catalog_id" => "catalog_id_03",
+						"name" => "Unendliche Geschichte",
+					],
+				],
+				"brand" => [
+					"name" => "Odeon",
+				],
+			]),
+			new Card([
+				"products" => [
+					[
+						"catalog_id" => "alb_id_01",
+						"name" => "Honzikova cesta",
+					],
+				],
+				"brand" => [
+					"name" => "Albatros",
+				],
+			]),
+		];
+		$instance->push(new DatalayerGenerator\MessageGenerators\GA4\ViewItemList(null, ["items" => $products], ["item_converter" => new DummyConverter]));
+		$this->_test_basic($instance, ["event" => "view_item_list"]);
+		$this->_test_basic_json($instance, ["event" => "view_item_list"]);
+		$this->_assertJsonIsSameAsArray($instance);
 
 		$dl = $instance->getDataLayerMessages();
-		$dl_json = $instance->getDataLayerMessagesJson();
 		$obj = array_shift($dl);
-		$obj_json = array_shift($dl_json);
 
-		$this->assertArrayNotHasKey("products", $obj["ecommerce"]["impressions"]);
-		$this->assertIsArray($obj["ecommerce"]["impressions"]);
-		# test prvku pole
-		$this->assertArrayHasKey("id", $obj["ecommerce"]["impressions"][0]);
-		$this->assertArrayHasKey("name", $obj["ecommerce"]["impressions"][0]);
+		$product_data = $obj["ecommerce"]["items"][0];
 
+		$this->assertEquals("Neverending Story", $product_data["item_name"]);
+		$expected = [
+			"catalog_ids" => [ "catalog_id_01", "catalog_id_02", "catalog_id_03", "alb_id_01", ],
+			"brands" => ["Odeon","Odeon",  "Odeon", "Albatros",],
+		];
 
-		# message returned either as array or as json should contain same data
-		$this->assertEquals(sizeof($dl), sizeof($dl_json));
-		$this->assertSame($obj, json_decode($obj_json,true));
+		foreach($obj["ecommerce"]["items"] as $idx => $item) {
+			$this->assertEquals($expected["catalog_ids"][$idx], $item["item_id"]);
+			$this->assertEquals($expected["brands"][$idx], $item["item_brand"]);
+			$this->assertEquals(1, $item["quantity"]);
+			$this->assertEquals("Dummies e-shop", $item["affiliation"]);
+		}
 	}
 
 	public function notest_datalayer_for_banner_promotions() {
