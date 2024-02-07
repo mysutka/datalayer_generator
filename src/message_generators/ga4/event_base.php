@@ -21,6 +21,10 @@ class EventBase extends ActionBase {
 
 	protected $event_params = [];
 
+	protected $object = null;
+
+	protected $items = [];
+
 	/**
 	 * @param array $event_params
 	 * - event_name - custom event name; defaults to value recognized by Universal Analytics tag in Google Tag Manager to support automatic Enhance Ecommerce events processing
