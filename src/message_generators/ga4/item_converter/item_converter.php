@@ -4,6 +4,8 @@ use DatalayerGenerator\MessageGenerators\GA4\EventBase;
 
 class ItemConverter {
 
+	protected $options = [];
+
 	function __construct($options=[]) {
 		$this->options = $options;
 	}

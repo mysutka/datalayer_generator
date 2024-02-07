@@ -56,7 +56,7 @@ class ActionBase {
 		$_activity = $this->getActivity();
 		$out = [
 			"ecommerce" => [
-				"${_activity}" => $this->getActivityData(),
+				"{$_activity}" => $this->getActivityData(),
 			],
 		];
 
