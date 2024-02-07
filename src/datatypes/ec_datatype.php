@@ -7,6 +7,10 @@ class EcDatatype {
 	static $ImpressionClassName = "\DatalayerGenerator\Datatypes\Impression";
 	static $PromotionClassName = "\DatalayerGenerator\Datatypes\Promotion";
 
+	var $options = [];
+
+	var $object = null;
+
 	public function __construct($object = null, $options=[]) {
 		$this->object = $object;
 		$this->options = $options;
