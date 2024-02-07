@@ -30,6 +30,8 @@ class Collector {
 
 	var $ecommerce_measurements = [];
 
+	var $options = [];
+
 	private function __construct() { }
 	private function __clone() { }
 	public function __wakeup() { }
