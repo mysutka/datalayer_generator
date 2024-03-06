@@ -19,8 +19,7 @@
 		"atk14/dictionary": "^1.0"
 	},
 	"autoload": {
-		"classmap": ["src"],
-		"files": ["src/load.php"]
+		"classmap": ["src"]
 	},
 	"autoload-dev": {
 		"classmap": ["src", "test"]
