@@ -42,7 +42,7 @@ class EventBase extends ActionBase {
 		];
 
 		if (!isset($options["item_converter"])) {
-			$options["item_converter"] = new ProductConverter(["price_finder" => $options["price_finder"]]);
+			$options["item_converter"] = new ProductConverter($options);
 		}
 		$this->object = $object;
 		$this->item_converter = $options["item_converter"];

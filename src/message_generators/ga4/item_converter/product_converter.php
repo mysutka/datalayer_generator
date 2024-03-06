@@ -3,22 +3,6 @@ namespace DatalayerGenerator\MessageGenerators\GA4\ItemConverter;
 
 class ProductConverter extends ItemConverter {
 
-	function getCategoryNames($object) {
-		if ($object instanceof \Product) {
-			$object = $object->getCard();
-		}
-		$cat = $object->getCategories(array("consider_invisible_categories" => false, "consider_filters" => false, "deduplicate" => true));
-		$cat = array_shift($cat);
-		if (is_null($cat)) {
-			return [];
-		}
-		$_items = \Category::GetInstancesOnPath($cat->getPath());
-		$_items = array_map(function($i) {
-			return $i->getName();
-		}, $_items);
-		return array_values($_items);
-	}
-
 	function getCommonProductAttributes($product) {
 		$categories = $this->getCategoryNames($product);
 		$card = $product->getCard();

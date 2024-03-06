@@ -7,6 +7,10 @@ class ItemConverter {
 	protected $options = [];
 
 	function __construct($options=[]) {
+		$options += [
+			"include_root_category" => true,
+		];
+
 		$this->options = $options;
 	}
 
@@ -48,6 +52,9 @@ class ItemConverter {
 		$_items = array_map(function($i) {
 			return $i->getName();
 		}, $_items);
+		if ($this->options["include_root_category"] === false) {
+			array_shift($_items);
+		}
 		return array_values($_items);
 	}
 
@@ -70,4 +77,3 @@ class ItemConverter {
 		return $out;
 	}
 }
-
