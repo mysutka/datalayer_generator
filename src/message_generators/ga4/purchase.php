@@ -9,7 +9,7 @@ class Purchase extends EventBase {
 			"event_name" => "purchase",
 		];
 		$options += [
-			"item_converter" => new OrderItemConverter(),
+			"item_converter" => new OrderItemConverter($options),
 		];
 		parent::__construct($object, $event_params, $options);
 	}

@@ -8,7 +8,7 @@ class AddShippingInfo extends EventBase {
 		$event_params += [
 			"event_name" => "add_shipping_info",
 		];
-		$options["item_converter"] = new BasketItemConverter();
+		$options["item_converter"] = new BasketItemConverter($options);
 		parent::__construct($object, $event_params, $options);
 	}
 

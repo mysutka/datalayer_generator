@@ -9,7 +9,7 @@ class ViewCart extends EventBase {
 			"event_name" => "view_cart",
 		];
 		$options += [
-			"item_converter" => new BasketItemConverter,
+			"item_converter" => new BasketItemConverter($options),
 		];
 		parent::__construct($object, $event_params, $options);
 	}

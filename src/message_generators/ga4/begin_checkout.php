@@ -9,7 +9,7 @@ class BeginCheckout extends EventBase {
 			"event_name" => "begin_checkout",
 		];
 		$options += [
-			"item_converter" => new BasketItemConverter,
+			"item_converter" => new BasketItemConverter($options),
 		];
 		parent::__construct($object, $event_params, $options);
 	}
