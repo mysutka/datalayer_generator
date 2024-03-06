@@ -2,7 +2,7 @@
 /**
  * @runTestsInSeparateProcesses
  */
-class CustomBuilderTest extends TestBase {
+class CustomBuildersTest extends TestBase {
 
 	public function test_datalayer_for_product_detail_custom_datatype() {
 		$instance = DatalayerGenerator\Datalayer::GetInstance();
@@ -29,8 +29,8 @@ class CustomBuilderTest extends TestBase {
 
 		$this->assertArrayHasKey("products", $obj["ecommerce"]["detail"]);
 		$this->assertArrayHasKey("actionField", $obj["ecommerce"]["detail"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["detail"]["products"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["detail"]["actionField"]);
+		$this->assertIsArray($obj["ecommerce"]["detail"]["products"]);
+		$this->assertIsArray($obj["ecommerce"]["detail"]["actionField"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
@@ -71,7 +71,7 @@ class CustomBuilderTest extends TestBase {
 
 		$this->assertArrayHasKey("promotions", $obj["ecommerce"]["promoView"]);
 		$this->assertArrayNotHasKey("actionField", $obj["ecommerce"]["promoView"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["promoView"]["promotions"]);
+		$this->assertIsArray($obj["ecommerce"]["promoView"]["promotions"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
@@ -107,7 +107,7 @@ class CustomBuilderTest extends TestBase {
 
 		$this->assertArrayNotHasKey("promotions", $obj["ecommerce"]["impressions"]);
 		$this->assertArrayNotHasKey("actionField", $obj["ecommerce"]["impressions"]);
-		$this->assertInternalType("array", $obj["ecommerce"]["impressions"]);
+		$this->assertIsArray($obj["ecommerce"]["impressions"]);
 
 		# message returned either as array or as json should contain same data
 		$this->assertEquals(sizeof($dl), sizeof($dl_json));
