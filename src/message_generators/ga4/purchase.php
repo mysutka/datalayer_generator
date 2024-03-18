@@ -64,8 +64,8 @@ class Purchase extends EventBase {
 	private function _getPriceToPay($incl_vat=true) {
 		$order = $this->getObject();
 		$_price = $order->getItemsPrice($incl_vat);
-		$_price += $order->getVouchersDiscountAmount($incl_vat);
-		$_price += $order->getCampaignsDiscountAmount($incl_vat);
+		$_price -= $order->getVouchersDiscountAmount($incl_vat);
+		$_price -= $order->getCampaignsDiscountAmount($incl_vat);
 		return $_price;
 }
 
