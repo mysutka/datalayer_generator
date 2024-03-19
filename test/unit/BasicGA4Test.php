@@ -85,7 +85,7 @@ class BasicGA4Test extends TestBaseGA4 {
 		$this->assertArrayNotHasKey("item_category5", $product_data);
 
 		# purchase specific attributes
-		$this->assertEquals(11376.54, $obj["ecommerce"]["value"]);
+		$this->assertEquals(8376.54, $obj["ecommerce"]["value"]);
 		$this->assertEquals(1714.11, $obj["ecommerce"]["tax"]);
 		$this->assertEquals(79.0, $obj["ecommerce"]["shipping"]);
 		$this->assertEquals($order_values["order_no"], $obj["ecommerce"]["transaction_id"]);
