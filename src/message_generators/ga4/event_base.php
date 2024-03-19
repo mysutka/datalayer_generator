@@ -31,8 +31,15 @@ class EventBase extends ActionBase {
 	 */
 	function __construct($object, $event_params=[], $options=[]) {
 
+		$currency = $this->getCurrentCurrency();
+		$currency_decimals = 2;
+		if ($currency) {
+			$currency_decimals = $currency->getDecimals();
+		}
+
 		$options += [
 			"item_converter" => null,
+			"items_decimals" => $currency_decimals,
 		];
 
 		$event_params += [
@@ -116,6 +123,7 @@ class EventBase extends ActionBase {
 
 	protected function _itemToArray($item) {
 		$out = $this->getItemConverter()->toArray($item, $this);
+		$out["price"] = round($out["price"], $this->options["items_decimals"]);
 		return $out;
 	}
 
