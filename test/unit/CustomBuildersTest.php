@@ -5,7 +5,7 @@
 class CustomBuildersTest extends TestBase {
 
 	public function test_datalayer_for_product_detail_custom_datatype() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 		DatalayerGenerator\Datatypes\EcDatatype::SetProductClassName(new DatatypeProductBuilder);
 
 		# @todo use own Generator, ProductDetailGenerator returns builtin product array
@@ -55,7 +55,7 @@ class CustomBuildersTest extends TestBase {
 	}
 
 	public function test_datalayer_for_promotion_custom_datatype() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 		DatalayerGenerator\Datatypes\EcDatatype::SetPromotionClassName("DatatypePromotionBuilder");
 
 		$promotions = ["a", "b"];
@@ -91,7 +91,7 @@ class CustomBuildersTest extends TestBase {
 	}
 
 	public function test_datalayer_for_impression_custom_datatype() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 		DatalayerGenerator\Datatypes\EcDatatype::SetImpressionClassName("DatatypeImpressionBuilder");
 
 		$promotions = ["a", "b"];

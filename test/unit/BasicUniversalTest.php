@@ -2,7 +2,7 @@
 /**
  * @runTestsInSeparateProcesses
  */
-class BasicTest extends TestBase {
+class BasicUniversalTest extends TestBase {
 
 	/*
 	public function test_idea() {
@@ -12,7 +12,7 @@ class BasicTest extends TestBase {
 	 */
 
 	public function test_empty_datalayer() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 		$this->assertNotNull($instance);
 
 		$this->assertEmpty($messages = $instance->getDataLayerMessages());
@@ -20,7 +20,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_product_impressions() {
-		$instance = \DatalayerGenerator\GoogleTagManager::GetInstance();
+		$instance = \DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionsGenerator returns builtin product array
 		$products = ["a", "b", "c"];
@@ -46,7 +46,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_product_detail() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ProductDetailGenerator returns builtin product array
 		$product = ["a","b"];
@@ -82,7 +82,7 @@ class BasicTest extends TestBase {
 
 
 	public function test_datalayer_for_purchase() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -107,7 +107,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_add() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -130,7 +130,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_checkout() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a", "b"];
@@ -154,7 +154,7 @@ class BasicTest extends TestBase {
 	}
 
 	public function test_datalayer_for_banner_promotions() {
-		$instance = DatalayerGenerator\Datalayer::GetInstance();
+		$instance = DatalayerGenerator\Collector::GetInstance();
 
 		# @todo use own Generator, ImpressionGenerator returns builtin product array
 		$product = ["a","b"];
@@ -194,7 +194,7 @@ class BasicTest extends TestBase {
 		$a = DatalayerGenerator\Datatypes\EcDatatype::CreatePromotion(["a" => 1, "b" => 2]);
 		$this->assertInstanceOf("DatalayerGenerator\Datatypes\Promotion", $a);
 #		error_log(print_r($a,true));
-#		error_log(print_r(GoogleTagManager::GetProductClass(),true));
+#		error_log(print_r(Collector::GetProductClass(),true));
 	}
 }
 

@@ -4,31 +4,33 @@ namespace DatalayerGenerator;
 use DatalayerGenerator\Datatypes\EcDatatype;
 
 /**
- * Obecna trida pro predavani zprav do dataLayer pro GTM.
- * Pro kazdy obchod by se mela vytvorit nova trida, ktera dedi GoogleTagManager, ktera bude upravovat nektera specifika, napriklad praci s produkty.
  *
- * Pouziti
+ * Usage
  * =======
- * Vytvoreni vlastni tridy
- * ```
- * class MyEshopTagManager extends GoogleTagManager {
- * }
- * ```
  *
  * Pak nekde v ApplicationController::_before_filter()
  * ```
- * $this->gtm = MyEshopTagManager::GetInstance()
+ * $this->datalayer = DatalayerGenerator\Collector::GetInstance($this, [
+ * 	"product_class_name" => new CustomProduct,
+ * 	"impression_class_name" => new CustomImpression,
+ * ]);
  * ```
  *
  */
-class GoogleTagManager {
+class Collector {
 
 	private static $Instance = null;
+
+	/**
+	 * collector for any data.
+	 */
 	var $dataLayer = [];
 
 	var $controller = null;
 
 	var $ecommerce_measurements = [];
+
+	var $options = [];
 
 	private function __construct() { }
 	private function __clone() { }
@@ -55,7 +57,7 @@ class GoogleTagManager {
 		}
 		self::$Instance->options = $options;
 		if ($controller) {
-			$controller->tpl_data["gtm"] = self::$Instance;
+			$controller->tpl_data["datalayer"] = self::$Instance;
 		}
 
 		EcDatatype::SetProductClassName($options["product_class_name"]);
@@ -135,13 +137,7 @@ class GoogleTagManager {
 
 		$_ecommerce_messages = [];
 		foreach($this->ecommerce_measurements as $m) {
-			if ($message = $m->getDataLayerMessage()) {
-				if ($_event = $m->getEvent()) {
-					$message["event"] = $_event;
-				}
-				if ($_actionField = $m->getActionField()) {
-					$message["ecommerce"][$m->getActivity()]["actionField"] = $_actionField;
-				}
+			if ($message = $m->getDatalayerMessage()) {
 				$_ecommerce_messages[] = $message;
 			}
 		}
@@ -214,46 +210,6 @@ class GoogleTagManager {
 		}
 		$_splittedObjects[] = $_objectPart;
 		return $_splittedObjects;
-	}
-
-	/**
-	 * Vrati data, ktera se budou odesilat pri kliknuti na odkaz produktu.
-	 *
-	 * Data budou rozdelena do skupin podle elementu, ve kterych jsou produkty seskupene.
-	 * Elementy jsou uvedeny pomoci css selectoru.
-	 *
-	 * Jen pro elementy (Generatory), ktere maji v options uvedeny list_selector, aby bylo mozne najit v kodu odpovidajici seznam produktu
-	 */
-	function getProductsData($options=[]) {
-		$options += [
-			"format" => "raw",
-		];
-		$products_data = [];
-		$ids_map = [];
-		foreach($this->ecommerce_measurements as $i) {
-			if (!isset($i->options["list_selector"])) {
-				continue;
-			}
-			if ($products = $i->getDataLayerMessage(["key" => "url", "return_list" => false])) {
-				$_pd = [
-					"dataLayer" => $products,
-				];
-				$i->options["add_to_cart_selector"] && ($_pd["add_to_cart_selector"] = $i->options["add_to_cart_selector"]);
-				$i->options["list_selector"] && ($_pd["selector"] = $i->options["list_selector"]);
-				$i->options["list"] && ($_pd["list_name"] = $i->options["list"]);
-				$products_data[] = $_pd;
-				$ids_map += $i->getIdsMap();
-			}
-		}
-		$products_data["ids_map"] = $ids_map;
-		if ($options["format"] == "json") {
-			return json_encode($products_data);
-		}
-		return $products_data;
-	}
-
-	function getProductsDataJson() {
-		return $this->getProductsData(["format" => "json"]);
 	}
 
 	/**
