@@ -68,10 +68,10 @@ class EventBase extends ActionBase {
 
 	function getDataLayerMessage() {
 		/* Hlasku vypsat jen kdyz je volana trida DatalayerGenerator nebo kdyz volana trida nema metodu getDataLayerMessage()
-		if (get_called_class() == get_class() || !in_array("getDataLayerMessage" , get_class_methods(get_called_class()))) {
+		if (get_called_class() == get_parent_class() || !in_array("getDataLayerMessage" , get_class_methods(get_called_class()))) {
 		}
 		 */
-		if (get_called_class() == get_class()) {
+		if (get_called_class() == get_parent_class($this)) {
 			trigger_error(sprintf("%s: do not use this class directly", get_called_class()));
 		}
 
