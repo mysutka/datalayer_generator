@@ -123,7 +123,9 @@ class EventBase extends ActionBase {
 
 	protected function _itemToArray($item) {
 		$out = $this->getItemConverter()->toArray($item, $this);
-		$out["price"] = round($out["price"], $this->options["items_decimals"]);
+		if (isset($out["price"])) {
+			$out["price"] = round($out["price"], $this->options["items_decimals"]);
+		}
 		return $out;
 	}
 

@@ -73,7 +73,9 @@ class ItemConverter {
 		}
 		$out = $this->getCommonProductAttributes($product);
 		$out["quantity"] = $this->getAmount($item, $event);
-		$out["price"] = $this->getUnitPrice($item, $event);
+		if (!is_null($_prc = $this->getUnitPrice($item, $event))) {
+			$out["price"] = $_prc;
+		}
 		return $out;
 	}
 }
