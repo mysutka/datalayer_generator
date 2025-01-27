@@ -1,7 +1,7 @@
 <?php
 namespace DatalayerGenerator\MessageGenerators\GA4\ItemConverter;
 
-class ProductConverter extends ItemConverter {
+class ProductConverter extends ItemConverterBase {
 
 	function getCommonProductAttributes($product) {
 		$categories = $this->getCategoryNames($product);
