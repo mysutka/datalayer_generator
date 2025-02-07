@@ -14,12 +14,16 @@ class ItemConverter {
 		$this->options = $options;
 	}
 
+	function getItemId($product) {
+		return $product->getCatalogId();
+	}
+
 	function getCommonProductAttributes($product) {
 		$categories = $this->getCategoryNames($product);
 		$card = $product->getCard();
 		$brand = $card->getBrand();
 		$_i = [
-			"item_id" => $product->getCatalogId(),
+			"item_id" => $this->getItemId($product),
 			"item_name" => $product->getName(),
 			"affiliation" => \SystemParameter::ContentOn("app.name.short"),
 			"coupon" => "",
