@@ -21,7 +21,7 @@ class ViewCart extends EventBase {
 			"value" => null,
 			"items" => [],
 		];
-#		$out["value"] = $this->getObject()->getItemsPriceInclVat();
+		$out["value"] = $this->getObject()->getItemsPriceInclVat();
 		$out["currency"] = (string)$this->getCurrentCurrency();
 		return $out;
 	}
