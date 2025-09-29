@@ -12,10 +12,6 @@ function smarty_function_gtm_datalayer($params, $template) {
 	$params += [
 		"format" => "js",
 	];
-	if (!SystemParameter::ContentOn("app.trackers.google.tag_manager.use_datalayer")) {
-		return null;
-	}
-
 	$smarty = atk14_get_smarty_from_template($template);
 
 	$out = [];
