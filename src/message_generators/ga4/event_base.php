@@ -108,7 +108,29 @@ class EventBase extends ActionBase {
 		$out = [
 			"items" => $this->itemsToArray(),
 		];
+
+		$vouchers = $this->_getVouchers();
+		if ($vouchers) {
+			$out["coupon"] = join(",", $vouchers);
+		}
 		return $out;
+	}
+
+	protected function _getVouchers() {
+
+		if (!(
+			($this->getObject() instanceof \Order) ||
+			($this->getObject() instanceof \Basket)
+		)) {
+			return null;
+		}
+		$vouchers = $this->getObject()->getVouchers();
+		$vouchers = array_filter($vouchers);
+		$vouchers = array_map(function($v) {
+			return $v->getVoucher()->getVoucherCode();
+		}, $vouchers);
+
+		return $vouchers;
 	}
 
 	protected function itemsToArray() {
