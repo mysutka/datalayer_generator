@@ -229,11 +229,11 @@ class BasicGA4Test extends TestBaseGA4 {
 
 		$this->assertArrayHasKey("promotion_id", $obj["ecommerce"]);
 		$this->assertArrayHasKey("promotion_name", $obj["ecommerce"]);
+		$this->assertArrayNotHasKey("creative_name", $obj["ecommerce"]);
+		$this->assertArrayNotHasKey("creative_slot", $obj["ecommerce"]);
 
 		$this->assertEquals("summer_sale", $obj["ecommerce"]["promotion_id"]);
 		$this->assertEquals("Summer Sale", $obj["ecommerce"]["promotion_name"]);
-		$this->assertNull($obj["ecommerce"]["creative_name"]);
-		$this->assertNull($obj["ecommerce"]["creative_slot"]);
 	}
 }
 

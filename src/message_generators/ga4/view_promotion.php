@@ -12,6 +12,9 @@ class ViewPromotion extends EventBase {
 	}
 
 	public function getEcommerceData() {
+		if (!$this->object) {
+			return null;
+		}
 		$out = parent::getEcommerceData();
 		$out += [
 			"creative_slot" => null,
@@ -20,6 +23,7 @@ class ViewPromotion extends EventBase {
 			"promotion_name" => $this->object->getName(),
 			"items" => [],
 		];
+			$out = array_filter($out, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		return $out;
 	}
 
