@@ -1,5 +1,6 @@
 <?php
 namespace DatalayerGenerator\MessageGenerators\GA4;
+use DatalayerGenerator\MessageGenerators\GA4\ItemConverter\BannerConverter;
 
 class ViewPromotion extends EventBase {
 
@@ -8,36 +9,23 @@ class ViewPromotion extends EventBase {
 			"event_name" => "view_promotion",
 #			"quantity" => 1,
 		];
+		$options += [
+			"item_converter" => new BannerConverter($options),
+		];
 		parent::__construct($object, $event_params, $options);
 	}
 
 	public function getEcommerceData() {
-		if (!$this->object) {
-			return null;
-		}
 		$out = parent::getEcommerceData();
-		$out += [
-			"creative_slot" => null,
-			"creative_name" => null,
-			"promotion_id" => $this->object->getHtmlElementId(),
-			"promotion_name" => $this->object->getName(),
-			"items" => [],
-		];
-			$out = array_filter($out, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
+		if ($this->object) {
+			$out += [
+				"creative_slot" => null,
+				"creative_name" => null,
+				"promotion_id" => $this->object->getHtmlElementId(),
+				"promotion_name" => $this->object->getName(),
+			];
+		}
+		$out = array_filter($out, ["DatalayerGenerator\MessageGenerators\GA4\EventBase", "_arrayFilter"]);
 		return $out;
 	}
-
-	function _getUnitPrice($product) {
-		$price_finder = $this->options["price_finder"];
-		if (is_null($price = $price_finder->getPrice($product))) {
-			return null;
-		}
-		return $price->getUnitPriceInclVat();
-	}
-
-	function getAmount($product) {
-		return 1;
-	}
 }
-
-

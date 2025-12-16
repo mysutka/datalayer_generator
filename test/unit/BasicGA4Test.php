@@ -205,35 +205,79 @@ class BasicGA4Test extends TestBaseGA4 {
 		}
 	}
 
-	public function test_datalayer_for_banner_promotions() {
+	public function test_datalayer_for_view_promotion_one_banner() {
 		$instance = \DatalayerGenerator\Collector::GetInstance();
 
-		$expected_product = [
-			"catalog_id" => "product-id-001",
-			"name" => "Neverending Story, pt.II"
-		];
 		$expected_banner = [
 			"promotion_name" => "Summer Sale",
 			"promotion_id" => "summer_sale",
 		];
-		$banner = new Banner($expected_banner);
-		$products = [new Product($expected_product), new Product(["name" => "b"])];
+		$expected_banner_2 = [
+			"promotion_name" => "30 percent discount on nuts",
+			"promotion_id" => "30_percent_on_nuts",
+		];
 
-		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\ViewPromotion($banner, ["items" => $products], ["item_converter" => new DummyConverter]));
+#		$banners = [new Banner($expected_banner), new Banner($expected_banner_2)];
+		$banner = new Banner($expected_banner);
+
+		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\ViewPromotion($banner, [], ["item_converter" => new DummyBannerConverter]));
 		$this->_test_basic($instance, ["event" => "view_promotion", "debug" => !true]);
 
 		$dl = $instance->getDataLayerMessages();
 		$obj = array_shift($dl);
 
-		$this->assertNotEmpty($obj["ecommerce"]["items"]);
+		$event = $obj["ecommerce"];
+		$items = $obj["ecommerce"]["items"];
+		$this->assertEmpty($items);
 
-		$this->assertArrayHasKey("promotion_id", $obj["ecommerce"]);
-		$this->assertArrayHasKey("promotion_name", $obj["ecommerce"]);
-		$this->assertArrayNotHasKey("creative_name", $obj["ecommerce"]);
-		$this->assertArrayNotHasKey("creative_slot", $obj["ecommerce"]);
+		$this->assertArrayHasKey("promotion_id", $event);
+		$this->assertArrayHasKey("promotion_name", $event);
+		$this->assertArrayNotHasKey("creative_name", $event);
+		$this->assertArrayNotHasKey("creative_slot", $event);
 
-		$this->assertEquals("summer_sale", $obj["ecommerce"]["promotion_id"]);
-		$this->assertEquals("Summer Sale", $obj["ecommerce"]["promotion_name"]);
+		$this->assertEquals("summer_sale", $event["promotion_id"]);
+		$this->assertEquals("Summer Sale", $event["promotion_name"]);
+	}
+
+	public function test_datalayer_for_view_promotion_multiple_banners() {
+		$instance = \DatalayerGenerator\Collector::GetInstance();
+
+		$expected_banner = [
+			"promotion_name" => "Summer Sale",
+			"promotion_id" => "summer_sale",
+		];
+		$expected_banner_2 = [
+			"promotion_name" => "30 percent discount on nuts",
+			"promotion_id" => "30_percent_on_nuts",
+		];
+
+		$banners = [new Banner($expected_banner), new Banner($expected_banner_2)];
+		$banner = new Banner($expected_banner);
+
+		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\ViewPromotion(null, ["items" => $banners]));
+		$this->_test_basic($instance, ["event" => "view_promotion", "check_items" => false, "debug" => !true]);
+
+		$dl = $instance->getDataLayerMessages();
+		$obj = array_shift($dl);
+
+		$items = $obj["ecommerce"]["items"];
+		$this->assertNotEmpty($items);
+
+		$this->assertArrayHasKey("promotion_id", $items[0]);
+		$this->assertArrayHasKey("promotion_name", $items[0]);
+		$this->assertArrayNotHasKey("creative_name", $items[0]);
+		$this->assertArrayNotHasKey("creative_slot", $items[0]);
+
+		$this->assertArrayHasKey("promotion_id", $items[1]);
+		$this->assertArrayHasKey("promotion_name", $items[1]);
+		$this->assertArrayNotHasKey("creative_name", $items[1]);
+		$this->assertArrayNotHasKey("creative_slot", $items[1]);
+
+		$this->assertEquals("summer_sale", $items[0]["promotion_id"]);
+		$this->assertEquals("Summer Sale", $items[0]["promotion_name"]);
+
+		$this->assertEquals("30_percent_on_nuts", $items[1]["promotion_id"]);
+		$this->assertEquals("30 percent discount on nuts", $items[1]["promotion_name"]);
 	}
 }
 

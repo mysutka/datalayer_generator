@@ -10,6 +10,7 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 			"debug" => false,
 			"event" => null,
 			"items_count" => 1,
+			"check_items" => true,
 		];
 
 		$tested_keys = [
@@ -34,11 +35,13 @@ class TestBaseGA4 extends PHPUnit\Framework\TestCase {
 		$this->assertArrayHasKey("items", $obj["ecommerce"]);
 
 		# test prvku pole
-		foreach($obj["ecommerce"]["items"] as $idx => $item) {
-			$this->assertEquals($idx, $item["index"]);
-			$this->assertIsArray($item);
-			$this->assertArrayHasKey("item_id", $item);
-			$this->assertArrayHasKey("item_name", $item);
+		if ($options["check_items"]===true) {
+			foreach($obj["ecommerce"]["items"] as $idx => $item) {
+				$this->assertEquals($idx, $item["index"]);
+				$this->assertIsArray($item);
+				$this->assertArrayHasKey("item_id", $item);
+				$this->assertArrayHasKey("item_name", $item);
+			}
 		}
 	}
 
