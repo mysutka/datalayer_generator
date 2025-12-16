@@ -112,8 +112,6 @@ class BasicGA4Test extends TestBaseGA4 {
 
 		$this->assertEquals("product-id-001", $product_data["item_id"]);
 		$this->assertEquals("Neverending Story, pt.II", $product_data["item_name"]);
-#		$this->assertArrayNotHasKey("value", $obj["ecommerce"]);
-#		$this->assertEquals("CZK", $obj["ecommerce"]["currency"]);
 	}
 
 	public function test_datalayer_for_begin_checkout() {
@@ -207,37 +205,35 @@ class BasicGA4Test extends TestBaseGA4 {
 		}
 	}
 
-	public function notest_datalayer_for_banner_promotions() {
-		$instance = DatalayerGenerator\Collector::GetInstance();
+	public function test_datalayer_for_banner_promotions() {
+		$instance = \DatalayerGenerator\Collector::GetInstance();
 
-		# @todo use own Generator, ImpressionGenerator returns builtin product array
-		$product = ["a","b"];
-		$instance->measureEcommerceObject(new \DatalayerGenerator\MessageGenerators\Promotion($product));
-		$this->_test_basic($instance, ["event" => "promoView", "debug" => !true]);
+		$expected_product = [
+			"catalog_id" => "product-id-001",
+			"name" => "Neverending Story, pt.II"
+		];
+		$expected_banner = [
+			"promotion_name" => "Summer Sale",
+			"promotion_id" => "summer_sale",
+		];
+		$banner = new Banner($expected_banner);
+		$products = [new Product($expected_product), new Product(["name" => "b"])];
+
+		$instance->push(new \DatalayerGenerator\MessageGenerators\GA4\ViewPromotion($banner, ["items" => $products], ["item_converter" => new DummyConverter]));
+		$this->_test_basic($instance, ["event" => "view_promotion", "debug" => !true]);
 
 		$dl = $instance->getDataLayerMessages();
-		$dl_json = $instance->getDataLayerMessagesJson();
-
 		$obj = array_shift($dl);
-		$obj_json = array_shift($dl_json);
 
-		$this->assertArrayHasKey("promotions", $obj["ecommerce"]["promoView"]);
-		$this->assertArrayNotHasKey("products", $obj["ecommerce"]["promoView"]);
-		$this->assertIsArray($obj["ecommerce"]["promoView"]);
+		$this->assertNotEmpty($obj["ecommerce"]["items"]);
 
-		# message returned either as array or as json should contain same data
-		$this->assertEquals(sizeof($dl), sizeof($dl_json));
-		$this->assertSame($obj, json_decode($obj_json,true));
+		$this->assertArrayHasKey("promotion_id", $obj["ecommerce"]);
+		$this->assertArrayHasKey("promotion_name", $obj["ecommerce"]);
 
-		# test prvku pole
-		$this->assertArrayHasKey("id", $obj["ecommerce"]["promoView"]["promotions"][0]);
-		$this->assertArrayHasKey("name", $obj["ecommerce"]["promoView"]["promotions"][0]);
-
-		$promotion_data = $obj["ecommerce"]["promoView"]["promotions"][0];
-		$this->assertEquals("example-banner-id-1", $promotion_data["id"]);
-		$this->assertEquals("Example Summer Sale", $promotion_data["name"]);
-		$this->assertEquals("Example Just Banner", $promotion_data["creative"]);
-		$this->assertEquals("example: slot 1", $promotion_data["position"]);
+		$this->assertEquals("summer_sale", $obj["ecommerce"]["promotion_id"]);
+		$this->assertEquals("Summer Sale", $obj["ecommerce"]["promotion_name"]);
+		$this->assertNull($obj["ecommerce"]["creative_name"]);
+		$this->assertNull($obj["ecommerce"]["creative_slot"]);
 	}
 }
 
