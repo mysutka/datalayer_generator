@@ -6,6 +6,11 @@
 namespace DatalayerGenerator\MessageGenerators;
 
 class ActionBase {
+
+	var $object = null;
+
+	var $options = null;
+
 	/**
 	 * @param array $options
 	 * - xhr - render in xhr requests [default: false]
