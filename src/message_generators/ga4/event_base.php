@@ -129,6 +129,7 @@ class EventBase extends ActionBase {
 		$vouchers = array_map(function($v) {
 			return $v->getVoucher()->getVoucherCode();
 		}, $vouchers);
+		$vouchers = array_unique($vouchers);
 
 		return $vouchers;
 	}
