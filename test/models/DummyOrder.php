@@ -25,4 +25,21 @@ class DummyOrder extends ElementBase {
 	function getCampaignsDiscountAmount() {
 		return 1000;
 	}
+
+	function getCampaigns() {
+		return array_map(function($e) {
+			return new Campaign($e);
+		}, $this->values["campaigns"]
+		);
+	}
+
+	function getVouchers() {
+		if (!isset($this->values["vouchers"])) {
+			return [];
+		}
+		return array_map(function($e) {
+			return new Voucher($e);
+		}, $this->values["vouchers"]
+		);
+	}
 }

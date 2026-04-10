@@ -17,11 +17,7 @@ class EventBase extends ActionBase {
 	 */
 	protected $item_converter = null;
 
-	protected $options = [];
-
 	protected $event_params = [];
-
-	protected $object = null;
 
 	protected $items = [];
 

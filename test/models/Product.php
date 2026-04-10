@@ -23,5 +23,12 @@ class Product extends ElementBase {
 	function getCard() {
 		return new Card($this->values["card"]);;
 	}
+
+	function getCode() {
+		if (!isset($this->values["code"])) {
+			return null;
+		}
+		return $this->values["code"];
+	}
 }
 
