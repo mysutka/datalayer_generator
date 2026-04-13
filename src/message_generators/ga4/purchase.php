@@ -44,31 +44,35 @@ class Purchase extends EventBase {
 			if (!isset($i["discount"])) {
 				continue;
 			}
-			$i["discount"] = round($i["discount"], $currency_decimals_summary);
+			$i["discount"] = round($i["discount"], ($currency_decimals_summary+2));
+			// price is discounted
+			// @see https://developers.google.com/analytics/devguides/collection/ga4/apply-discount?client_type=gtag
+			$i["price"] = $i["price"] - $i["discount"];
 		}
 		return $out;
 	}
 
 	/**
-	 * zjisti se sleva a ta se rozpocita mezi polozky podle pomeru cen za polozky
+	 * The discount is calculated and distributed among the items based on their respective prices
+	 * discount is per unit
 	 */
 	function _applyDiscountToItems($items) {
 		$order = $this->getObject();
 		$price_vat = $order->getItemsPrice(true);
-		# getItemsPrice zahrnuje i castku ze zaokrouhleni.
-		# odecteme zaokrouhleni, protoze na nej neni sleva aplikovana
+		# getItemsPrice() includes rounding price
+		# we need to get price without the rounding price
 		foreach($this->items as $i) {
 			if($i->getProduct()->getCode()=="price_rounding") {
 				$price_vat -= $i->getUnitPriceInclVat() * $i->getAmount();
 			}
 		}
-		# a pak slevu rozpocitame mezi polozky (vynechame zaokrouhleni)
+		# distribute the discount between items (excluding rounding)
 		$discount = $this->getDiscount();
 		foreach($items as $idx => &$i) {
 			if ($this->items[$idx]->getProduct()->getCode()=="price_rounding") {
 				continue;
 			}
-			$_prc = $i["price"] * $i["quantity"];
+			$_prc = $i["price"];
 			$_d = $_prc / $price_vat * $discount;
 			$i["discount"] = $_d;
 		}
