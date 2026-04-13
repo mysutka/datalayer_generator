@@ -37,19 +37,24 @@ class Collector {
 	public function __wakeup() { }
 
 	/**
+	 * Generates new instance of Collector.
 	 *
+	 * Use option force_new=true if you need a fresh new instance.
+	 * It is usefull in when test class contains more tests and earlier tests would affect the later ones.
 	 *
 	 * @param Atk14Controller $controller
 	 * @param array $options
+	 * - force_new - return fresh new instance and not the statically saved [default: false]
 	 */
 	static function &GetInstance($controller=null, $options=array()) {
 		$options += [
+			"force_new" => false,
 			"product_class_name" => "\DatalayerGenerator\Datatypes\Product",
 			"impression_class_name" => "\DatalayerGenerator\Datatypes\Impression",
 			"promotion_class_name" => "\DatalayerGenerator\Datatypes\Promotion",
 		];
 
-		if (!isset(self::$Instance)) {
+		if (!isset(self::$Instance) || ($options["force_new"]===true)) {
 			self::$Instance = new static();
 		}
 		if ($controller) {
