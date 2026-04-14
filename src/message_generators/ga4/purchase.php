@@ -61,15 +61,22 @@ class Purchase extends EventBase {
 		$price_vat = $order->getItemsPrice(true);
 		# getItemsPrice() includes rounding price
 		# we need to get price without the rounding price
+		# also we do not apply discount to products in sale
 		foreach($this->items as $i) {
 			if($i->getProduct()->getCode()=="price_rounding") {
 				$price_vat -= $i->getUnitPriceInclVat() * $i->getAmount();
+			} elseif (!$i->getCampaignDiscountApplied()) {
+				$price_vat -= $i->getUnitPriceInclVat() * $i->getAmount();
 			}
 		}
-		# distribute the discount between items (excluding rounding)
+		# Distribute the discount between items (excluding rounding)
 		$discount = $this->getDiscount();
 		foreach($items as $idx => &$i) {
 			if ($this->items[$idx]->getProduct()->getCode()=="price_rounding") {
+				continue;
+			}
+			# Campaign was not available, we do not apply discount to the item
+			if (!$this->items[$idx]->getCampaignDiscountApplied()) {
 				continue;
 			}
 			$_prc = $i["price"];
