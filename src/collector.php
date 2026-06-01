@@ -72,6 +72,10 @@ class Collector {
 		return self::$Instance;
 	}
 
+	static function Reset() {
+		self::$Instance = null;
+	}
+
 	/**
 	 * Pridani bezneho ecommerce objektu do seznamu
 	 */
