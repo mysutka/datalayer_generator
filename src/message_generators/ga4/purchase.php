@@ -39,41 +39,7 @@ class Purchase extends EventBase {
 		$out["value"] = round($price_vat, $currency_decimals_summary);
 		$out["tax"] = round($tax, $currency_decimals_summary);
 		$out["shipping"] = round($this->_getShipping(), $currency_decimals_summary);
-		$out["items"] = $this->_applyDiscountToItems($out["items"]);
-		foreach($out["items"] as &$i) {
-			if (!isset($i["discount"])) {
-				continue;
-			}
-			$i["discount"] = round($i["discount"], $currency_decimals_summary);
-		}
 		return $out;
-	}
-
-	/**
-	 * zjisti se sleva a ta se rozpocita mezi polozky podle pomeru cen za polozky
-	 */
-	function _applyDiscountToItems($items) {
-		$order = $this->getObject();
-		$price_vat = $order->getItemsPrice(true);
-		# getItemsPrice zahrnuje i castku ze zaokrouhleni.
-		# odecteme zaokrouhleni, protoze na nej neni sleva aplikovana
-		foreach($this->items as $i) {
-			if($i->getProduct()->getCode()=="price_rounding") {
-				$price_vat -= $i->getUnitPriceInclVat() * $i->getAmount();
-			}
-		}
-		# a pak slevu rozpocitame mezi polozky (vynechame zaokrouhleni)
-		$discount = $this->getDiscount();
-		foreach($items as $idx => &$i) {
-			if ($this->items[$idx]->getProduct()->getCode()=="price_rounding") {
-				continue;
-			}
-			$_prc = $i["price"] * $i["quantity"];
-			$_d = $_prc / $price_vat * $discount;
-			$i["discount"] = $_d;
-		}
-		return $items;
-
 	}
 
 	function _getUnitPrice($order_item) {
@@ -84,24 +50,13 @@ class Purchase extends EventBase {
 		return $order_item->getAmount();
 	}
 
-	/**
-	 * Price for shipping.
-	 *
-	 * When order contains a campaign or voucher with free shipping flag, returns 0.
-	 * Does not distinguish / detect partial discount. Only full price or zero.
-	 */
 	protected function _getShipping() {
 		$shipping = $this->getObject()->getDeliveryFeeInclVat();
 		$campaigns = $this->getObject()->getCampaigns();
-		$vouchers = $this->getObject()->getVouchers();
-
 		$campaigns = array_filter($campaigns, function($c) {
 			return $c->freeShipping();
 		});
-		$vouchers = array_filter($vouchers, function($c) {
-			return $c->freeShipping();
-		});
-		if ((sizeof($campaigns)>0) || (sizeof($vouchers)>0)) {
+		if (sizeof($campaigns)>0) {
 			$shipping = 0.0;
 		}
 		return $shipping;
@@ -137,25 +92,4 @@ class Purchase extends EventBase {
 		return $out;
 	}
 
-	private function _getVouchersDiscountAmount($incl_vat) {
-		$order = $this->getObject();
-		$vouchers = $order->getVouchers();
-		$vouchers = array_filter($vouchers, function($v) {
-			return !$v->freeShipping();
-		});
-		
-		$out = 0.0;
-		foreach($vouchers as $v) {
-#			$out += $v->getDiscountAmount($incl_vat);
-			$out += $v->getDiscountAmount();
-		}
-		return $out;
-	}
-
-	private function getDiscount() {
-		$_discount = $this->_getCampaignsDiscountAmount(true);
-		$_discount += $this->_getVouchersDiscountAmount(true);
-
-		return $_discount;
-	}
 }

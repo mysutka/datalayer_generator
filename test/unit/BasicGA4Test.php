@@ -48,9 +48,6 @@ class BasicGA4Test extends TestBaseGA4 {
 
 		$order_values = [
 			"order_no" => "ORDER-T_12345",
-			"campaigns" => [
-				["free_shipping" => true,],
-			],
 		];
 		$order = new DummyOrder($order_values);
 		$expected_item = [
