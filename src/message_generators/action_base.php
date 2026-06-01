@@ -7,9 +7,9 @@ namespace DatalayerGenerator\MessageGenerators;
 
 class ActionBase {
 
-	var $object = null;
+	protected $object = null;
 
-	var $options = null;
+	protected $options = null;
 
 	/**
 	 * @param array $options
