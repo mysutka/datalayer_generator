@@ -52,13 +52,6 @@ class Purchase extends EventBase {
 
 	protected function _getShipping() {
 		$shipping = $this->getObject()->getDeliveryFeeInclVat();
-		$campaigns = $this->getObject()->getCampaigns();
-		$campaigns = array_filter($campaigns, function($c) {
-			return $c->freeShipping();
-		});
-		if (sizeof($campaigns)>0) {
-			$shipping = 0.0;
-		}
 		return $shipping;
 	}
 
@@ -71,25 +64,9 @@ class Purchase extends EventBase {
 	private function _getPriceToPay($incl_vat=true) {
 		$order = $this->getObject();
 		$_price = $order->getItemsPrice($incl_vat);
-		$_price -= $order->getVouchersDiscountAmount($incl_vat, ["free_shipping" => false]);
-		$_price -= $this->_getCampaignsDiscountAmount($incl_vat);
+		$_price -= $order->getVouchersDiscountAmount($incl_vat);
+		$_price -= $order->getCampaignsDiscountAmount($incl_vat);
 		return $_price;
-	}
-
-	/**
-	 * Sleva za kampane, bez dopravy zdarma.
-	 *
-	 */
-	private function _getCampaignsDiscountAmount($incl_vat) {
-		$campaigns = $this->getObject()->getCampaigns();
-		$campaigns = array_filter($campaigns, function($c) {
-			return !$c->freeShipping();
-		});
-		$out = 0.0;
-		foreach($campaigns as $c) {
-			$out += $c->getDiscountAmount($incl_vat);
-		}
-		return $out;
-	}
+}
 
 }
